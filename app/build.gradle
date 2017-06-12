@@ -7,8 +7,9 @@ android {
         applicationId "net.egordmitriev.cheatsheets"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode Integer.parseInt(project.VERSION_MAJOR) * 10000 + Integer.parseInt(project.VERSION_MINOR) * 100 + Integer.parseInt(project.VERSION_PATCH)
+        versionName "${project.VERSION_MAJOR}.${project.VERSION_MINOR}.${project.VERSION_PATCH}"
+        project.ext.set("archivesBaseName", "CheatSheets-" + defaultConfig.versionName);
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
