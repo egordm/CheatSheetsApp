@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "42145903108",
+    "firebase_url": "https://cheatsheets-e4ed7.firebaseio.com",
+    "project_id": "cheatsheets-e4ed7",
+    "storage_bucket": "cheatsheets-e4ed7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:42145903108:android:7e586cce10461f0d",
+        "android_client_info": {
+          "package_name": "net.egordmitriev.cheatsheets"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "42145903108-qo4o2obl9kvdfalvfu8ni9aot4ht8shf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGj4czpP0mCranem-6kNHuOLNshT67cqA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
