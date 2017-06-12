@@ -33,10 +33,13 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'com.balysv.materialmenu:material-menu:2.0.0'
 
+    compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
 
     compile 'com.orhanobut:logger:2.1.1'
+
+    compile 'com.google.firebase:firebase-core:11.0.0'
 
     testCompile 'junit:junit:4.12'
 }
