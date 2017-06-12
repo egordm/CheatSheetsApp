@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="@dimen/spacing_half"
+    android:paddingRight="@dimen/spacing_half"
+    android:paddingTop="@dimen/spacing_quarter"
+    android:paddingBottom="@dimen/spacing_quarter">
+
+
+</FrameLayout>-->
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/spacing_half">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selectable_list_item_background"
+            android:foreground="?selectableItemBackground"
+            android:orientation="horizontal"
+            android:padding="@dimen/spacing_half">
+
+            <TextView
+                android:id="@+id/header_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Hello world"
+                android:layout_weight="1"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/white"/>
+
+            <ImageView
+                android:id="@+id/expandable_arrow"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_expand"
+                android:tint="@color/white"/>
+
+        </LinearLayout>
+
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/expandable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:el_duration="300"
+            app:el_expanded="false">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Content"
+                android:textColor="#000"/>
+
+        </net.cachapa.expandablelayout.ExpandableLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

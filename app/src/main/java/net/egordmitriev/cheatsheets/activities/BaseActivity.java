@@ -20,6 +20,8 @@ import android.widget.EditText;
 
 import net.egordmitriev.cheatsheets.R;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by EgorDm on 12-Jun-2017.
  */
@@ -29,18 +31,18 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(getLayout());
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = ButterKnife.findById(this, R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = ButterKnife.findById(this, R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
