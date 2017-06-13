@@ -15,6 +15,7 @@ import net.egordmitriev.cheatsheets.listeners.ExpansionArrowListener;
 import net.egordmitriev.cheatsheets.pojo.Category;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.widgets.AdvancedRecyclerView;
+import net.egordmitriev.cheatsheets.widgets.SheetItemViewHolder;
 
 import java.util.List;
 
@@ -84,9 +85,14 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         public void onBind(int position, Category category) {
             mPosition = position;
             mTitle.setText(Html.fromHtml(category.title));
+            boolean even = false;
             for(CheatSheet sheet : category.sheets) {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.cheatsheet_item, mSheetsList, false);
+                SheetItemViewHolder viewHolder = new SheetItemViewHolder(view);
+                viewHolder.onBind(sheet);
+                view.setBackgroundResource(even ? R.color.tableEven : R.color.tableUneven);
                 mSheetsList.addView(view);
+                even = !even;
             }
         }
 
