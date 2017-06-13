@@ -17,7 +17,7 @@ import net.egordmitriev.cheatsheets.listeners.ExpansionArrowListener;
 import net.egordmitriev.cheatsheets.pojo.Category;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.widgets.AdvancedRecyclerView;
-import net.egordmitriev.cheatsheets.widgets.SheetItemViewHolder;
+import net.egordmitriev.cheatsheets.widgets.SheetItemHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +90,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         @BindView(R.id.expandable_contents)
         LinearLayout mSheetsList;
 
-        List<SheetItemViewHolder> mViewHolders = new ArrayList<>();
+        List<SheetItemHolder> mViewHolders = new ArrayList<>();
 
         private int mPosition;
 
@@ -107,7 +107,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             mSheetsList.removeAllViews();
             for(CheatSheet sheet : category.sheets) {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.cheatsheet_item, mSheetsList, false);
-                SheetItemViewHolder viewHolder = new SheetItemViewHolder(view);
+                SheetItemHolder viewHolder = new SheetItemHolder(view);
                 viewHolder.onBind(sheet);
                 view.setBackgroundResource(even ? R.color.tableEven : R.color.tableUneven);
                 view.setTag(viewHolder);

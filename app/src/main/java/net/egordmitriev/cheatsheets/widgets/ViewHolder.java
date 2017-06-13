@@ -6,9 +6,9 @@ import android.view.View;
  * Created by EgorDm on 13-Jun-2017.
  */
 
-public abstract class ViewHolder<T>  {
+public abstract class ViewHolder<T> {
 
-    View mView;
+    protected View mView;
 
     public ViewHolder(View view) {
         mView = view;
