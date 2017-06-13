@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
-
 import net.cachapa.expandablelayout.ExpandableLayout;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.listeners.ExpansionArrowListener;
@@ -47,16 +45,15 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         mCategories = new ArrayList<Category>() {{addAll(mAllCategories);}};
     }
 
-    public void onQuery(String query) {
+/*    public void onQuery(String query) {
         mCategories.clear();
         for(Category category : mAllCategories) {
             if(category.matchesString(query)) {
-                Logger.d(category.title);
                 mCategories.add(category);
             }
         }
         notifyDataSetChanged();
-    }
+    }*/
 
     @Override
     public CategoryListAdapter.CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

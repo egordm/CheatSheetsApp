@@ -33,6 +33,7 @@ public class SheetItemHolder extends ViewHolder<CheatSheet>{
 
     @Override
     public void onBind(CheatSheet data) {
+        super.onBind(data);
         onBind(data, 0);
     }
 

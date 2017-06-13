@@ -24,14 +24,16 @@ public class Category extends MatchableModel{
     }
 
     @Override
-    protected List<String> getSearchableStrings() {
+    protected List<String> getSearchableStrings(boolean recursive) {
         List<String> ret = new ArrayList<String>() {{
             add(slug);
             add(title);
             add(description);
         }};
-        for (CheatSheet cheatSheet : sheets) {
-            ret.addAll(cheatSheet.getSearchableStrings());
+        if(recursive) {
+            for (CheatSheet cheatSheet : sheets) {
+                ret.addAll(cheatSheet.getSearchableStrings(true));
+            }
         }
         return ret;
     }

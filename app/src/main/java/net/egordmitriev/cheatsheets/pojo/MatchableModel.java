@@ -7,11 +7,11 @@ import java.util.List;
  */
 
 public abstract class MatchableModel extends Model {
-    protected abstract List<String> getSearchableStrings();
+    protected abstract List<String> getSearchableStrings(boolean recursive);
 
-    public boolean matchesString(String rawQuery) {
+    public boolean matchesString(String rawQuery, boolean recursive) {
         String[] qs = rawQuery.toLowerCase().split("\\s+");
-        List<String> contents = getSearchableStrings();
+        List<String> contents = getSearchableStrings(recursive);
         boolean ret = true;
         for (String query : qs) {
             ret = false;

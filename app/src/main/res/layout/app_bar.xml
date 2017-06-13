@@ -51,7 +51,9 @@
                         android:imeOptions="actionSearch|flagNoExtractUi"
                         app:iconifiedByDefault="false"
                         app:queryBackground="@android:color/transparent"
-                        app:searchIcon="@null"/>
+                        app:searchIcon="@null"
+                        android:paddingLeft="-16dp"
+                        android:paddingStart="-16dp"/>
 
                 </android.support.v7.widget.Toolbar>
             </LinearLayout>

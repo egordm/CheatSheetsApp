@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.api.API;
 import net.egordmitriev.cheatsheets.pojo.Category;
+import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.widgets.CategoryGroupHolder;
 
 import java.util.ArrayList;
@@ -39,12 +40,26 @@ public class MainActivity extends SearchBarActivity
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        if(query == null || query.isEmpty()) return true;
         for(int i = 0; i < mCategories.size(); i++) {
-            mHolders.get(i).getView().setVisibility(
-                    (mCategories.get(i).matchesString(query)) ? View.VISIBLE : View.GONE
-            );
+            CategoryGroupHolder holder = mHolders.get(i);
+            boolean matchesCategory = mCategories.get(i).matchesString(query, false);
+            if(mCategories.get(i).matchesString(query, true) || matchesCategory) {
+                holder.collapse(false, true);
+                holder.getView().setVisibility(View.VISIBLE);
+                for(int j = 0; j < mCategories.get(i).sheets.size(); j++) {
+                    CheatSheet cheatSheet = mCategories.get(i).sheets.get(j);
+                    holder.getSheetsList().getChildAt(j).setVisibility(
+                            (cheatSheet.matchesString(query, false) || matchesCategory) ? View.VISIBLE : View.GONE
+                    );
+                }
+            } else {
+                holder.collapse(true, true);
+                mHolders.get(i).getView().setVisibility(View.GONE);
+            }
+
+
         }
-        //mListAdapter.onQuery(query);
         return true;
     }
 }

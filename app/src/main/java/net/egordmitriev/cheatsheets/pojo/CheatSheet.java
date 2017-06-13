@@ -28,7 +28,7 @@ public class CheatSheet extends MatchableModel {
     }
 
     @Override
-    protected List<String> getSearchableStrings() {
+    protected List<String> getSearchableStrings(final boolean recursive) {
         return new ArrayList<String>() {{
             add(slug);
             add(title);

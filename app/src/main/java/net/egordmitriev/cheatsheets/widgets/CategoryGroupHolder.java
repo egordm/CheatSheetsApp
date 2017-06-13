@@ -44,6 +44,7 @@ public class CategoryGroupHolder extends ViewHolder<Category> {
 
     @Override
     public void onBind(Category data) {
+        super.onBind(data);
         mTitle.setText(Html.fromHtml(data.title));
         for(int i = 0; i < data.sheets.size(); i++) {
             View view = SheetItemHolder.inflate(LayoutInflater.from(mContext), mSheetsList);
@@ -60,6 +61,18 @@ public class CategoryGroupHolder extends ViewHolder<Category> {
         }else {
             view.setSelected(true);
             mExpandableLayout.expand();
+        }
+    }
+
+    public LinearLayout getSheetsList() {
+        return mSheetsList;
+    }
+
+    public void collapse(boolean collapse, boolean animate) {
+        if(collapse) {
+            mExpandableLayout.collapse(animate);
+        } else {
+            mExpandableLayout.expand(animate);
         }
     }
 
