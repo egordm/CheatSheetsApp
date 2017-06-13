@@ -8,8 +8,15 @@ import android.view.View;
 
 public abstract class ViewHolder<T>  {
 
+    View mView;
+
     public ViewHolder(View view) {
+        mView = view;
     }
 
     public abstract void onBind(T data);
+
+    public View getView() {
+        return mView;
+    }
 }

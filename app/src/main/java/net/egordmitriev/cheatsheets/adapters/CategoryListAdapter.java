@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import net.cachapa.expandablelayout.ExpandableLayout;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.listeners.ExpansionArrowListener;
@@ -17,6 +19,7 @@ import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.widgets.AdvancedRecyclerView;
 import net.egordmitriev.cheatsheets.widgets.SheetItemViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,13 +36,26 @@ import butterknife.OnClick;
 public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.CategoryViewHolder> {
 
     protected AdvancedRecyclerView mRecyclerView;
+    protected final List<Category> mAllCategories;
     protected List<Category> mCategories;
     protected Context mContext;
 
     public CategoryListAdapter(Context context, AdvancedRecyclerView recyclerView , List<Category> categories) {
         mContext = context;
         mRecyclerView = recyclerView;
-        mCategories = categories;
+        mAllCategories = categories;
+        mCategories = new ArrayList<Category>() {{addAll(mAllCategories);}};
+    }
+
+    public void onQuery(String query) {
+        mCategories.clear();
+        for(Category category : mAllCategories) {
+            if(category.matchesString(query)) {
+                Logger.d(category.title);
+                mCategories.add(category);
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -50,7 +66,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
     @Override
     public void onBindViewHolder(CategoryListAdapter.CategoryViewHolder holder, int position) {
-        holder.onBind(position, mCategories.get(position));
+        holder.onBind(position, mAllCategories.get(position));
     }
 
     @Override
@@ -74,6 +90,8 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         @BindView(R.id.expandable_contents)
         LinearLayout mSheetsList;
 
+        List<SheetItemViewHolder> mViewHolders = new ArrayList<>();
+
         private int mPosition;
 
         public CategoryViewHolder(View itemView) {
@@ -86,11 +104,13 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             mPosition = position;
             mTitle.setText(Html.fromHtml(category.title));
             boolean even = false;
+            mSheetsList.removeAllViews();
             for(CheatSheet sheet : category.sheets) {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.cheatsheet_item, mSheetsList, false);
                 SheetItemViewHolder viewHolder = new SheetItemViewHolder(view);
                 viewHolder.onBind(sheet);
                 view.setBackgroundResource(even ? R.color.tableEven : R.color.tableUneven);
+                view.setTag(viewHolder);
                 mSheetsList.addView(view);
                 even = !even;
             }

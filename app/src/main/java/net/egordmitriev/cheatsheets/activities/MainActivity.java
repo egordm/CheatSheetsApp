@@ -17,16 +17,22 @@ public class MainActivity extends SearchBarActivity
     @BindView(R.id.recycler)
     AdvancedRecyclerView mRecyclerView;
 
+    CategoryListAdapter mListAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Logger.json(API.sGson.toJson(API.getData()));
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(new CategoryListAdapter(this, mRecyclerView, API.getData()));
+        mListAdapter = new CategoryListAdapter(this, mRecyclerView, API.getData());
+        mRecyclerView.setAdapter(mListAdapter);
 
     }
 
-
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        mListAdapter.onQuery(query);
+        return true;
+    }
 }

@@ -30,4 +30,6 @@ public class AdvancedRecyclerView extends RecyclerView {
         view.getLocationOnScreen(location);
         smoothScrollBy(0, Utils.clamp(location[1], 0, computeVerticalScrollRange()) - computeVerticalScrollOffset());
     }
+
+
 }

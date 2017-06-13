@@ -3,8 +3,6 @@ package net.egordmitriev.cheatsheets.widgets;
 import android.view.View;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
-
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 
@@ -33,8 +31,9 @@ public class SheetItemViewHolder extends ViewHolder<CheatSheet>{
 
     @OnClick(R.id.wrapper)
     public void onClick() {
-        Logger.d("Click wrapper");
+        //Logger.d("Click wrapper");
     }
+
 
 
 }
