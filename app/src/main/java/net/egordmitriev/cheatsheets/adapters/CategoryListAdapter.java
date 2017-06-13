@@ -1,16 +1,20 @@
 package net.egordmitriev.cheatsheets.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.listeners.ExpansionArrowListener;
 import net.egordmitriev.cheatsheets.pojo.Category;
+import net.egordmitriev.cheatsheets.pojo.CheatSheet;
+import net.egordmitriev.cheatsheets.widgets.AdvancedRecyclerView;
 
 import java.util.List;
 
@@ -22,11 +26,18 @@ import butterknife.OnClick;
  * Created by EgorDm on 12-Jun-2017.
  */
 
+//https://code.tutsplus.com/tutorials/getting-started-with-recyclerview-and-cardview-on-android--cms-23465
+    //http://www.journaldev.com/9942/android-expandablelistview-example-tutorial
+
 public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.CategoryViewHolder> {
 
+    protected AdvancedRecyclerView mRecyclerView;
     protected List<Category> mCategories;
+    protected Context mContext;
 
-    public CategoryListAdapter(List<Category> categories) {
+    public CategoryListAdapter(Context context, AdvancedRecyclerView recyclerView , List<Category> categories) {
+        mContext = context;
+        mRecyclerView = recyclerView;
         mCategories = categories;
     }
 
@@ -38,7 +49,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
     @Override
     public void onBindViewHolder(CategoryListAdapter.CategoryViewHolder holder, int position) {
-        holder.onBind(mCategories.get(position));
+        holder.onBind(position, mCategories.get(position));
     }
 
     @Override
@@ -59,14 +70,24 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         @BindView(R.id.header_title)
         TextView mTitle;
 
+        @BindView(R.id.expandable_contents)
+        LinearLayout mSheetsList;
+
+        private int mPosition;
+
         public CategoryViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            mExpandableLayout.setOnExpansionUpdateListener(new ExpansionArrowListener(ButterKnife.findById(itemView, R.id.expandable_arrow)));
+            mExpandableLayout.setOnExpansionUpdateListener(new ExpansionListener(ButterKnife.findById(itemView, R.id.expandable_arrow)));
         }
 
-        public void onBind(Category category) {
+        public void onBind(int position, Category category) {
+            mPosition = position;
             mTitle.setText(Html.fromHtml(category.title));
+            for(CheatSheet sheet : category.sheets) {
+                View view = LayoutInflater.from(mContext).inflate(R.layout.cheatsheet_item, mSheetsList, false);
+                mSheetsList.addView(view);
+            }
         }
 
         @OnClick(R.id.header)
@@ -77,6 +98,24 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             }else {
                 view.setSelected(true);
                 mExpandableLayout.expand();
+            }
+        }
+
+        class ExpansionListener extends ExpansionArrowListener {
+
+            public ExpansionListener(View arrow) {
+                super(arrow);
+            }
+
+            @Override
+            public void onExpansionUpdate(float expansionFraction, int state) {
+                if(state != mPreviousState) {
+                    if(state == ExpandableLayout.State.EXPANDED) {
+                        mRecyclerView.smoothScrollToPosition(mPosition);
+                    }
+                }
+                super.onExpansionUpdate(expansionFraction, state);
+
             }
         }
     }

@@ -11,7 +11,7 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 
 public class ExpansionArrowListener implements ExpandableLayout.OnExpansionUpdateListener {
 
-    private int mPreviousState = ExpandableLayout.State.COLLAPSED;
+    protected int mPreviousState = ExpandableLayout.State.COLLAPSED;
     private View mArrow;
 
     public ExpansionArrowListener(View arrow) {

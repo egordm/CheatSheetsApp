@@ -8,5 +8,8 @@
 
     <color name="white">#FFFFFF</color>
 
+    <color name="tableEven">@android:color/transparent</color>
+    <color name="tableUneven">#4d000000</color>
+
     <color name="card_background">#FFFFFF</color>
 </resources>
