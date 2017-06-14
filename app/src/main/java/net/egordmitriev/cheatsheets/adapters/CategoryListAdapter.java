@@ -13,7 +13,6 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.listeners.ExpansionArrowListener;
 import net.egordmitriev.cheatsheets.pojo.Category;
-import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.widgets.SheetItemHolder;
 
 import java.util.ArrayList;
@@ -101,15 +100,15 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             mTitle.setText(Html.fromHtml(category.title));
             boolean even = false;
             mSheetsList.removeAllViews();
-            for(CheatSheet sheet : category.sheets) {
+           /* for(CheatSheet sheet : category.sheets) {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.cheatsheet_item, mSheetsList, false);
-                SheetItemHolder viewHolder = new SheetItemHolder(view);
+                SheetItemHolder viewHolder = new SheetItemHolder(mAcview);
                 viewHolder.onBind(sheet);
                 view.setBackgroundResource(even ? R.color.tableEven : R.color.tableUneven);
                 view.setTag(viewHolder);
                 mSheetsList.addView(view);
                 even = !even;
-            }
+            }*/
         }
 
         @OnClick(R.id.header)

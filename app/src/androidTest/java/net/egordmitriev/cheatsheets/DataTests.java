@@ -17,6 +17,6 @@ public class DataTests {
 
     @Test
     public void recieveApiData() {
-        Logger.json(API.sGson.toJson(API.getData()));
+        Logger.json(API.sGson.toJson(API.getCategories()));
     }
 }

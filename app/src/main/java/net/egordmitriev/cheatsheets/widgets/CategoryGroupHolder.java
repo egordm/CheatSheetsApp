@@ -1,6 +1,6 @@
 package net.egordmitriev.cheatsheets.widgets;
 
-import android.content.Context;
+import android.app.Activity;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +23,7 @@ import butterknife.OnClick;
 
 public class CategoryGroupHolder extends ViewHolder<Category> {
 
-    protected Context mContext;
+    protected Activity mActivity;
 
     @BindView(R.id.expandable)
     ExpandableLayout mExpandableLayout;
@@ -35,9 +35,9 @@ public class CategoryGroupHolder extends ViewHolder<Category> {
     LinearLayout mSheetsList;
 
 
-    public CategoryGroupHolder(Context context, View view) {
+    public CategoryGroupHolder(Activity activity, View view) {
         super(view);
-        mContext = context;
+        mActivity = activity;
         ButterKnife.bind(this, view);
         mExpandableLayout.setOnExpansionUpdateListener(new ExpansionArrowListener(ButterKnife.findById(view, R.id.expandable_arrow)));
     }
@@ -47,8 +47,8 @@ public class CategoryGroupHolder extends ViewHolder<Category> {
         super.onBind(data);
         mTitle.setText(Html.fromHtml(data.title));
         for(int i = 0; i < data.sheets.size(); i++) {
-            View view = SheetItemHolder.inflate(LayoutInflater.from(mContext), mSheetsList);
-            SheetItemHolder viewHolder = new SheetItemHolder(view);
+            View view = SheetItemHolder.inflate(LayoutInflater.from(mActivity), mSheetsList);
+            SheetItemHolder viewHolder = new SheetItemHolder(mActivity, view);
             viewHolder.onBind(data.sheets.get(i), i);
         }
     }

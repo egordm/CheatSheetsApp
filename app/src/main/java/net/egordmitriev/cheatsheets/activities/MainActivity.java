@@ -19,7 +19,7 @@ import butterknife.BindView;
 public class MainActivity extends SearchBarActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    @BindView(R.id.categoryContainer)
+    @BindView(R.id.dataContainer)
     LinearLayout mCategoryContainer;
 
     private List<Category> mCategories;
@@ -28,7 +28,7 @@ public class MainActivity extends SearchBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCategories = API.getData();
+        mCategories = API.getCategories();
         mHolders = new ArrayList<>();
         for(Category category : mCategories) {
             View view = CategoryGroupHolder.inflate(getLayoutInflater(), mCategoryContainer);

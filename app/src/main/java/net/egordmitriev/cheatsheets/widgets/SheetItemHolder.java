@@ -1,11 +1,16 @@
 package net.egordmitriev.cheatsheets.widgets;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import net.egordmitriev.cheatsheets.R;
+import net.egordmitriev.cheatsheets.activities.DetailActivity;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 
 import butterknife.BindView;
@@ -18,15 +23,19 @@ import butterknife.OnClick;
 
 public class SheetItemHolder extends ViewHolder<CheatSheet>{
 
+    protected Activity mActivity;
+
     @BindView(R.id.title)
     TextView mTitleView;
 
-    public SheetItemHolder(View view) {
+    public SheetItemHolder(Activity activity, View view) {
         super(view);
+        mActivity = activity;
         ButterKnife.bind(this, view);
     }
 
     public void onBind(CheatSheet data, int position) {
+        onBind(data);
         mTitleView.setText(data.title);
         mView.setBackgroundResource((position % 2 == 0) ? R.color.tableEven : R.color.tableUneven);
     }
@@ -34,12 +43,15 @@ public class SheetItemHolder extends ViewHolder<CheatSheet>{
     @Override
     public void onBind(CheatSheet data) {
         super.onBind(data);
-        onBind(data, 0);
     }
 
     @OnClick(R.id.wrapper)
     public void onClick() {
-        //Logger.d("Click wrapper");
+        Logger.d("Click data " + (mData == null));
+        Intent intent = new Intent(mActivity, DetailActivity.class);
+        intent.putExtra(DetailActivity.CHEATSHEET_SLUG_KEY, mData.slug);
+        mActivity.startActivity(intent);
+
     }
 
     public static View inflate(LayoutInflater inflater, ViewGroup parent) {
