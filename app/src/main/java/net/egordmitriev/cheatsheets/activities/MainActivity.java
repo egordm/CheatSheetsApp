@@ -40,17 +40,17 @@ public class MainActivity extends SearchBarActivity
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        if(query == null || query.isEmpty()) return true;
+        boolean empty = (query == null || query.isEmpty());
         for(int i = 0; i < mCategories.size(); i++) {
             CategoryGroupHolder holder = mHolders.get(i);
-            boolean matchesCategory = mCategories.get(i).matchesString(query, false);
-            if(mCategories.get(i).matchesString(query, true) || matchesCategory) {
+            boolean matchesCategory = empty || mCategories.get(i).matchesString(query, false);
+            if(matchesCategory || mCategories.get(i).matchesString(query, true)) {
                 holder.collapse(false, true);
                 holder.getView().setVisibility(View.VISIBLE);
                 for(int j = 0; j < mCategories.get(i).sheets.size(); j++) {
                     CheatSheet cheatSheet = mCategories.get(i).sheets.get(j);
                     holder.getSheetsList().getChildAt(j).setVisibility(
-                            (cheatSheet.matchesString(query, false) || matchesCategory) ? View.VISIBLE : View.GONE
+                            (matchesCategory || cheatSheet.matchesString(query, false) ) ? View.VISIBLE : View.GONE
                     );
                 }
             } else {

@@ -14,7 +14,6 @@ import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.listeners.ExpansionArrowListener;
 import net.egordmitriev.cheatsheets.pojo.Category;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
-import net.egordmitriev.cheatsheets.widgets.AdvancedRecyclerView;
 import net.egordmitriev.cheatsheets.widgets.SheetItemHolder;
 
 import java.util.ArrayList;
@@ -33,12 +32,12 @@ import butterknife.OnClick;
 
 public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.CategoryViewHolder> {
 
-    protected AdvancedRecyclerView mRecyclerView;
+    protected RecyclerView mRecyclerView;
     protected final List<Category> mAllCategories;
     protected List<Category> mCategories;
     protected Context mContext;
 
-    public CategoryListAdapter(Context context, AdvancedRecyclerView recyclerView , List<Category> categories) {
+    public CategoryListAdapter(Context context, RecyclerView recyclerView , List<Category> categories) {
         mContext = context;
         mRecyclerView = recyclerView;
         mAllCategories = categories;

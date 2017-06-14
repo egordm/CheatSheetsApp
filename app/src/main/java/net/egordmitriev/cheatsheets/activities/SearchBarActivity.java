@@ -38,5 +38,4 @@ public class SearchBarActivity extends BaseActivity implements SearchView.OnQuer
         return false;
     }
 
-
 }
