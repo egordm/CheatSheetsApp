@@ -8,15 +8,11 @@
                                              tools:context="net.egordmitriev.cheatsheets.activities.MainActivity"
                                              tools:showIn="@layout/app_bar">
 
-    <ScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/dataContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/dataContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        </android.support.v7.widget.RecyclerView>
-    </ScrollView>
+    </android.support.v7.widget.RecyclerView>
 </android.support.constraint.ConstraintLayout>
