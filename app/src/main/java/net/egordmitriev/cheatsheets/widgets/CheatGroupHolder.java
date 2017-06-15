@@ -40,9 +40,9 @@ public class CheatGroupHolder extends RecyclerViewHolder<CheatGroup> {
         mTitle.setText(Html.fromHtml(data.title));
     }
 
-    public static View inflate(LayoutInflater inflater, ViewGroup parent) {
+    public static View inflate(LayoutInflater inflater, ViewGroup parent, boolean bind) {
         View view = inflater.inflate(R.layout.group_item, parent, false);
-        parent.addView(view);
+        if(bind) parent.addView(view);
         return view;
     }
 }

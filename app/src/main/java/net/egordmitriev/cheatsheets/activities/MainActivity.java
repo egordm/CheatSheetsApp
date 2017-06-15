@@ -57,8 +57,6 @@ public class MainActivity extends SearchBarActivity
                 holder.collapse(true, true);
                 mHolders.get(i).getView().setVisibility(View.GONE);
             }
-
-
         }
         return true;
     }

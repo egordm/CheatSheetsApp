@@ -63,6 +63,7 @@ public abstract class AdvancedRecyclerAdapter<TD extends MatchableModel, TVH ext
                 mData.remove(model);
             }
         }
+        if(mData.size() == models.size()) return; //Arrays are identical. Nothing to add
         mData.addAll(models);
     }
 
