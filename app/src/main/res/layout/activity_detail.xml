@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         tools:context="net.egordmitriev.cheatsheets.activities.MainActivity">
 
-        <include layout="@layout/content_main"/>
+        <include layout="@layout/content_detail"/>
 
         <include layout="@layout/app_bar"/>
 
