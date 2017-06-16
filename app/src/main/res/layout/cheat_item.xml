@@ -19,6 +19,6 @@
         android:lineSpacingExtra="8dp"
         android:text="Hello world Hello world Hello world Hello world Hello world Hello world"
         android:textAppearance="@style/AppTheme.TextAppearance.Group"
-        android:textSize="11sp"/>
+        android:textSize="13sp"/>
 
 </LinearLayout>

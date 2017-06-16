@@ -39,7 +39,9 @@ public class CheatGroupHolder extends RecyclerViewHolder<CheatGroup> {
 
     @Override
     public void onBind(CheatGroup data) {
+        mExpandableLayout.setExpanded(true, true);
         mTitle.setText(Html.fromHtml(data.title));
+        mCheatsList.removeAllViews();
         for(int i = 0; i < data.cheats.size(); i++) {
             View view = CheatItemHolder.inflate(LayoutInflater.from(mActivity), mCheatsList);
             CheatItemHolder viewHolder = new CheatItemHolder(mActivity, view);
