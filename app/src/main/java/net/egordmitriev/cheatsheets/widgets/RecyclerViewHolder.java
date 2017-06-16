@@ -1,5 +1,6 @@
 package net.egordmitriev.cheatsheets.widgets;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -11,12 +12,15 @@ import butterknife.ButterKnife;
 
 public abstract class RecyclerViewHolder<T> extends RecyclerView.ViewHolder {
 
+    protected Activity mActivity;
+
     protected T mData;
 
     protected View mView;
 
-    public RecyclerViewHolder(View itemView) {
+    public RecyclerViewHolder(Activity activity, View itemView) {
         super(itemView);
+        mActivity = activity;
         mView = itemView;
         ButterKnife.bind(this, itemView);
     }

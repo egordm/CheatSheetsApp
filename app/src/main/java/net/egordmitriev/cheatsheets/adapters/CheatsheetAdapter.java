@@ -23,13 +23,11 @@ public class CheatsheetAdapter extends AdvancedRecyclerAdapter<CheatGroup, Cheat
     @Override
     public CheatGroupHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View holder = CheatGroupHolder.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new CheatGroupHolder(holder);
+        return new CheatGroupHolder(mActivity, holder);
     }
 
     @Override
     public void onBindViewHolder(CheatGroupHolder holder, int position) {
         holder.onBind(mData.get(position));
     }
-
-
 }

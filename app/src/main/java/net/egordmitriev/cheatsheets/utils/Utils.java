@@ -1,8 +1,4 @@
-package net.egordmitriev.cheatsheets;
-
-import android.os.Build;
-import android.text.Html;
-import android.text.Spanned;
+package net.egordmitriev.cheatsheets.utils;
 
 /**
  * Created by EgorDm on 12-Jun-2017.
@@ -14,11 +10,4 @@ public class Utils {
         return Math.max(min, Math.min(max, val));
     }
 
-    public static Spanned htmlFromString(String s) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(s, Html.FROM_HTML_MODE_COMPACT);
-        } else {
-            return Html.fromHtml(s);
-        }
-    }
 }

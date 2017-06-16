@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/wrapper"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="wrap_content"
     android:foreground="?selectableItemBackground"
+    android:minHeight="40dp"
     android:orientation="horizontal"
     android:padding="@dimen/spacing_half">
 
@@ -13,14 +14,11 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:bufferType="spannable"
         android:gravity="center_vertical"
-        android:text="Hello world"
-        android:textAppearance="@style/AppTheme.TextAppearance.Group"/>
-
-    <ImageView
-        android:id="@+id/expandable_arrow"
-        android:layout_width="24dp"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_cloud"/>
+        android:lineSpacingExtra="8dp"
+        android:text="Hello world Hello world Hello world Hello world Hello world Hello world"
+        android:textAppearance="@style/AppTheme.TextAppearance.Group"
+        android:textSize="11sp"/>
 
 </LinearLayout>
