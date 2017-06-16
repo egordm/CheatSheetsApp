@@ -8,6 +8,11 @@ import android.widget.TextView;
 
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.pojo.Cheat;
+import net.egordmitriev.cheatsheets.utils.spans.CodeSpannableBuilder;
+
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +37,16 @@ public class CheatItemHolder extends ViewHolder<Cheat> {
     public void onBind(Cheat data, int position) {
         onBind(data);
 
+        //Workaround padding
+        int padding = 12; // in pixels
+        mTitleView.setShadowLayer(padding /* radius */, 0, 0, 0 /* transparent */);
+        mTitleView.setPadding(padding, padding, padding, padding);
+
+        try {
+            mTitleView.setText(CodeSpannableBuilder.fromHtml(data.content));
+        } catch (ParserConfigurationException | SAXException e) {
+            e.printStackTrace();
+        }
         mView.setBackgroundResource((position % 2 == 0) ? R.color.tableEven : R.color.tableUneven);
     }
 
