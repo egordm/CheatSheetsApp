@@ -35,4 +35,20 @@
             android:textAppearance="@style/AppTheme.TextAppearance.CodeSpanText"
             android:textSize="13sp"/>
     </TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/spacing_half">
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="2"
+            android:layout_weight="1"
+            android:bufferType="spannable"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="8dp"
+            android:textAppearance="@style/AppTheme.TextAppearance.CodeSpanText"
+            android:textSize="13sp"/>
+    </TableRow>
 </merge>
