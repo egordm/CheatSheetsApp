@@ -11,7 +11,7 @@ import java.util.List;
  * Created by EgorDm on 16-Jun-2017.
  */
 
-public class CodeSpan implements LineBackgroundSpan {
+public class CodeSpannable implements LineBackgroundSpan {
 
     private List<TagArea> mTags = new ArrayList<>();
 

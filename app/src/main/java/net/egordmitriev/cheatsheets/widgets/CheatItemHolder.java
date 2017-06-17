@@ -43,7 +43,7 @@ public class CheatItemHolder extends ViewHolder<Cheat> {
         mTitleView.setPadding(padding, padding, padding, padding);
 
         try {
-            mTitleView.setText(CodeSpannableBuilder.fromHtml(data.content));
+            mTitleView.setText(CodeSpannableBuilder.fromHtml(data.content.get(0)));
         } catch (ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }

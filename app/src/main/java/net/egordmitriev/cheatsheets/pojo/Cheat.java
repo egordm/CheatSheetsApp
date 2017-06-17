@@ -7,8 +7,9 @@ import java.util.List;
  */
 
 public class Cheat {
-    public String content;
+    public List<String> content;
     public String description;
+    public int layout;
     public String usage;
     public String source;
     public List<String> tags;
@@ -16,7 +17,7 @@ public class Cheat {
     public Cheat() {
     }
 
-    public Cheat(String content, String description, String usage, String source, List<String> tags) {
+    public Cheat(List<String> content, String description, String usage, String source, List<String> tags) {
         this.content = content;
         this.description = description;
         this.usage = usage;
