@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
-
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.pojo.Cheat;
 import net.egordmitriev.cheatsheets.utils.spans.CodeSpannableBuilder;
