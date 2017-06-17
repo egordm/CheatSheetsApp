@@ -8,6 +8,10 @@
 
     <color name="white">#FFFFFF</color>
     <color name="codeSpanBorder">#25000000</color>
+    <color name="codeSpanBackground">#07000000</color>
+    <color name="kbdSpanBorder">#9E9E9E</color>
+    <color name="kbdSpanBackground">#E0E0E0</color>
+
 
     <color name="tableUneven">@android:color/transparent</color>
     <color name="tableEven">#0c000000</color>

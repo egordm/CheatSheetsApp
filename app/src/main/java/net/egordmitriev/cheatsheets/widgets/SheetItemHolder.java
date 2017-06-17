@@ -47,7 +47,6 @@ public class SheetItemHolder extends ViewHolder<CheatSheet>{
 
     @OnClick(R.id.wrapper)
     public void onClick() {
-        Logger.d("Click data " + (mData == null));
         Intent intent = new Intent(mActivity, DetailActivity.class);
         intent.putExtra(DetailActivity.CHEATSHEET_SLUG_KEY, mData.slug);
         mActivity.startActivity(intent);

@@ -20,6 +20,7 @@ public class CodeParagraphSpan implements LineBackgroundSpan {
 
     private RectF mBorderRect;
     private Paint mBorderPaint;
+    private Paint mBackgroundPaint;
 
     public CodeParagraphSpan() {
         //target.setSpan(new TypefaceSpan("monospace"), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -29,6 +30,12 @@ public class CodeParagraphSpan implements LineBackgroundSpan {
             setAntiAlias(true);
             setStrokeWidth(3);
             setColor(CheatSheets.getAppContext().getResources().getColor(R.color.codeSpanBorder));
+        }};
+
+        mBackgroundPaint = new Paint(){{
+            setStyle(Style.FILL);
+            setAntiAlias(true);
+            setColor(CheatSheets.getAppContext().getResources().getColor(R.color.codeSpanBackground));
         }};
     }
 
@@ -45,5 +52,6 @@ public class CodeParagraphSpan implements LineBackgroundSpan {
                 top-PADDING_X/2, left + bounds.width() + PADDING_X, baseline +  bounds.height()/3 + PADDING_X/2);
 
         c.drawRoundRect(mBorderRect, CORNER_RADIUS, CORNER_RADIUS, mBorderPaint);
+        c.drawRoundRect(mBorderRect, CORNER_RADIUS, CORNER_RADIUS, mBackgroundPaint);
     }
 }

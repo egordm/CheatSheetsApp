@@ -111,6 +111,9 @@ public class CodeSpannableBuilder {
                 } else {
                     mSpannableBuilder.setSpan(new CodePartSpan(), holder.start, holder.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
+            } else if(holder.type == Kbd.class) {
+                mSpannableBuilder.setSpan(new TypefaceSpan("monospace"), holder.start, holder.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                mSpannableBuilder.setSpan(new KbdPartSpan(), holder.start, holder.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
 
