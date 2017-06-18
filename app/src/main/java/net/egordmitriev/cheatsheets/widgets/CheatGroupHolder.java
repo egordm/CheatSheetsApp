@@ -39,7 +39,7 @@ public class CheatGroupHolder extends RecyclerViewHolder<CheatGroup> {
 
     @Override
     public void onBind(CheatGroup data) {
-        mExpandableLayout.setExpanded(true, true);
+        mExpandableLayout.setExpansion(1);
         mTitle.setText(Html.fromHtml(data.title));
         mCheatsList.removeAllViews();
         for(int i = 0; i < data.cheats.size(); i++) {
