@@ -1,8 +1,10 @@
 package net.egordmitriev.cheatsheets.utils.spans;
 
+import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 
 import com.orhanobut.logger.Logger;
@@ -47,7 +49,7 @@ public class CodeSpannableBuilder {
 
         public CodeContentHandler(XMLReader reader, String source) {
             mReader = reader;
-            mSource = "<root>"+source+"</root>";
+            mSource = "<root>" + source + "</root>";
             mSpannableBuilder = new SpannableStringBuilder();
         }
 
@@ -56,7 +58,7 @@ public class CodeSpannableBuilder {
             try {
                 mReader.parse(new InputSource(new StringReader(mSource)));
             } catch (Exception e) {
-                Logger.e("Error parsing: "+mSource);
+                Logger.e("Error parsing: " + mSource);
                 throw e;
             }
             return mSpannableBuilder;
@@ -65,10 +67,18 @@ public class CodeSpannableBuilder {
         @Override
         public void startElement(String uri, String tag, String qName, Attributes attributes) throws SAXException {
             if (tag.equalsIgnoreCase("code")) {
-                mSpannableBuilder.setSpan(new Code(),mSpannableBuilder.length(), mSpannableBuilder.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                addMarker(new Code(), mSpannableBuilder.length());
             } else if (tag.equalsIgnoreCase("kbd")) {
-                mSpannableBuilder.setSpan(new Kbd(),mSpannableBuilder.length(), mSpannableBuilder.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                addMarker(new Kbd(), mSpannableBuilder.length());
+            } else if (tag.equalsIgnoreCase("strong") || tag.equalsIgnoreCase("b")) {
+                addMarker(new Bold(), mSpannableBuilder.length());
+            } else if (tag.equalsIgnoreCase("em") || tag.equalsIgnoreCase("i")) {
+                addMarker(new Italic(), mSpannableBuilder.length());
             }
+        }
+
+        public void addMarker(Object marker, int pos) {
+            mSpannableBuilder.setSpan(marker, pos, pos, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
 
         @Override
@@ -77,6 +87,12 @@ public class CodeSpannableBuilder {
                 addTag(Code.class);
             } else if (tag.equalsIgnoreCase("kbd")) {
                 addTag(Kbd.class);
+            } else if (tag.equalsIgnoreCase("strong") || tag.equalsIgnoreCase("b")) {
+                addTag(Bold.class);
+            } else if (tag.equalsIgnoreCase("em") || tag.equalsIgnoreCase("i")) {
+                addTag(Italic.class);
+            } else if (tag.equalsIgnoreCase("br")) {
+                mSpannableBuilder.append('\n');
             }
         }
 
@@ -93,7 +109,7 @@ public class CodeSpannableBuilder {
         @Override
         public void endDocument() throws SAXException {
             super.endDocument();
-            for(ElementHolder holder : mElementHolders) {
+            for (ElementHolder holder : mElementHolders) {
                 boolean isParagraph = (holder.end - holder.start) >= mSpannableBuilder.length();
                 /*if (isParagraph) {
                     mSpannableBuilder.append("\n");
@@ -104,16 +120,20 @@ public class CodeSpannableBuilder {
         }
 
         public void applySpan(ElementHolder holder, boolean isParagraph) {
-            if(holder.type == Code.class) {
+            if (holder.type == Code.class) {
                 mSpannableBuilder.setSpan(new TypefaceSpan("monospace"), holder.start, holder.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                if(isParagraph) {
+                if (isParagraph) {
                     mSpannableBuilder.setSpan(new CodeParagraphSpan(), holder.start, holder.end, Spanned.SPAN_PARAGRAPH);
                 } else {
                     mSpannableBuilder.setSpan(new CodePartSpan(), holder.start, holder.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
-            } else if(holder.type == Kbd.class) {
+            } else if (holder.type == Kbd.class) {
                 mSpannableBuilder.setSpan(new TypefaceSpan("monospace"), holder.start, holder.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 mSpannableBuilder.setSpan(new KbdPartSpan(), holder.start, holder.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } else if (holder.type == Bold.class) {
+                mSpannableBuilder.setSpan(new StyleSpan(Typeface.BOLD), holder.start, holder.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } else if (holder.type == Italic.class) {
+                mSpannableBuilder.setSpan(new StyleSpan(Typeface.ITALIC), holder.start, holder.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
 
@@ -175,7 +195,15 @@ public class CodeSpannableBuilder {
         }
     }
 
-    private static class Code{}
+    private static class Code {
+    }
 
-    private static class Kbd{}
+    private static class Kbd {
+    }
+
+    private static class Bold {
+    }
+
+    private static class Italic {
+    }
 }
