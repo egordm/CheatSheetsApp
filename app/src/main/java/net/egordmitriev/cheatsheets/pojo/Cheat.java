@@ -1,12 +1,13 @@
 package net.egordmitriev.cheatsheets.pojo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by EgorDm on 12-Jun-2017.
  */
 
-public class Cheat {
+public class Cheat extends MatchableModel {
     public List<String> content;
     public String description;
     public int layout;
@@ -23,5 +24,16 @@ public class Cheat {
         this.usage = usage;
         this.source = source;
         this.tags = tags;
+    }
+
+    @Override
+    protected List<String> getSearchableStrings(boolean recursive) {
+        return new ArrayList<String>() {{
+            addAll(content);
+            add(description);
+            add(usage);
+            add(source);
+            addAll(tags);
+        }};
     }
 }

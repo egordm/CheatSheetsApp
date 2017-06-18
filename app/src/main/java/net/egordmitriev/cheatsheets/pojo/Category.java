@@ -32,7 +32,7 @@ public class Category extends MatchableModel{
         }};
         if(recursive) {
             for (CheatSheet cheatSheet : sheets) {
-                ret.addAll(cheatSheet.getSearchableStrings(true));
+                ret.addAll(cheatSheet.getSearchableStrings(false));
             }
         }
         return ret;

@@ -25,11 +25,21 @@ public class CheatGroup extends MatchableModel {
 
     @Override
     protected List<String> getSearchableStrings(final boolean recursive) {
-        return new ArrayList<String>() {{
+        List<String> ret =  new ArrayList<String>() {{
             add(title);
             add(description);
             addAll(tags);
-            //if(recursive) TODO: add cheat
+
         }};
+        if(recursive) {
+            for (Cheat cheat : cheats) {
+                ret.addAll(cheat.getSearchableStrings(false));
+            }
+        }
+        return ret;
+    }
+
+    public CheatGroup cloneMe() {
+        return new CheatGroup(title, description, (List<Cheat>) ((ArrayList<Cheat>)cheats).clone(), tags);
     }
 }

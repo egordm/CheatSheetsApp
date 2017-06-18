@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.adapters.CheatsheetAdapter;
 import net.egordmitriev.cheatsheets.api.API;
+import net.egordmitriev.cheatsheets.pojo.Cheat;
 import net.egordmitriev.cheatsheets.pojo.CheatGroup;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 
@@ -63,13 +64,14 @@ public class DetailActivity extends SearchBarActivity {
             boolean matchesCategory = empty || mCheatSheet.groups.get(i).matchesString(query, false);
             if(matchesCategory || mCheatSheet.groups.get(i).matchesString(query, true)) {
                 //TODO: expand
-                data.add(mCheatSheet.groups.get(i));
-                /*for(int j = 0; j < mCategories.get(i).sheets.size(); j++) {
-                    CheatSheet cheatSheet = mCategories.get(i).sheets.get(j);
-                    holder.getSheetsList().getChildAt(j).setVisibility(
-                            (matchesCategory || cheatSheet.matchesString(query, false) ) ? View.VISIBLE : View.GONE
-                    );
-                }*/
+                CheatGroup cheatGroup = mCheatSheet.groups.get(i).cloneMe();
+                data.add(cheatGroup);
+                for(int j = cheatGroup.cheats.size() - 1; j >= 0 ; j--) {
+                    Cheat cheatSheet = cheatGroup.cheats.get(j);
+                    if(!(matchesCategory || cheatSheet.matchesString(query, false))) {
+                        cheatGroup.cheats.remove(j);
+                    }
+                }
             } else {
                 //TODO: collapse
             }
