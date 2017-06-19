@@ -45,8 +45,6 @@ public class KbdPartSpan extends ReplacementSpan { //TODO: merge with paragraph
         return (int) (PADDING_X + paint.measureText(text.subSequence(start, end).toString()) + PADDING_X);
     }
 
-
-
     @Override
     public void draw(@NonNull Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, @NonNull Paint paint) {
         float width = paint.measureText(text.subSequence(start, end).toString());
