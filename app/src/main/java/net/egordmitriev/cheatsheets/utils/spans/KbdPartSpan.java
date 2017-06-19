@@ -13,6 +13,8 @@ import net.egordmitriev.cheatsheets.R;
  * Created by EgorDm on 17-Jun-2017.
  */
 
+
+//https://developer.android.com/reference/android/text/StaticLayout.html
 public class KbdPartSpan extends ReplacementSpan { //TODO: merge with paragraph
 
     private static final int PADDING_X = 12;
