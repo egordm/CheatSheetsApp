@@ -5,7 +5,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -30,7 +30,7 @@ public class CheatGroupHolder extends RecyclerViewHolder<CheatGroup> {
     TextView mTitle;
 
     @BindView(R.id.expandable_contents)
-    LinearLayout mCheatsList;
+    TableLayout mCheatsList;
 
     public CheatGroupHolder(Activity activity, View itemView) {
         super(activity, itemView);

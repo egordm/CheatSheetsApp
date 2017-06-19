@@ -44,8 +44,9 @@
             android:id="@+id/expandable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:el_duration="300"
-            app:el_expanded="true">
+            app:el_expanded="false">
 
             <TableLayout
                 android:id="@+id/expandable_contents"
