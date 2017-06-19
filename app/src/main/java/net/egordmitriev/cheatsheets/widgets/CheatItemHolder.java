@@ -13,6 +13,7 @@ import android.widget.TextView;
 import net.egordmitriev.cheatsheets.CheatSheets;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.pojo.Cheat;
+import net.egordmitriev.cheatsheets.utils.Utils;
 import net.egordmitriev.cheatsheets.utils.spans.CodeSpannableBuilder;
 import net.egordmitriev.cheatsheets.utils.spans.QuoteSpan;
 
@@ -52,8 +53,8 @@ public class CheatItemHolder extends ViewHolder<Cheat> {
     public void onBind(Cheat data, int position) {
         onBind(data);
 
-        applyWorkaround(mContentLeft);
-        applyWorkaround(mContentRight);
+        Utils.applyWorkaround(mContentLeft);
+        Utils.applyWorkaround(mContentRight);
 
         try {
             mContentLeft.setText(CodeSpannableBuilder.fromHtml(data.content.get(0)));
@@ -82,12 +83,6 @@ public class CheatItemHolder extends ViewHolder<Cheat> {
         }
         mView.setBackgroundResource((position % 2 == 0) ? R.color.tableEven : R.color.tableUneven);
         mDescriptionRow.setBackgroundResource((position % 2 == 0) ? R.color.tableEven : R.color.tableUneven);
-    }
-
-    public void applyWorkaround(TextView textView) {
-        int padding = 12;
-        textView.setShadowLayer(padding /* radius */, 0, 0, 0 /* transparent */);
-        textView.setPadding(padding, padding, padding, padding);
     }
 
     @Override

@@ -12,15 +12,17 @@ public class CheatGroup extends MatchableModel {
     public String description;
     public List<Cheat> cheats;
     public List<String> tags;
+    public List<String> notes;
 
     public CheatGroup() {
     }
 
-    public CheatGroup(String title, String description, List<Cheat> cheats, List<String> tags) {
+    public CheatGroup(String title, String description, List<Cheat> cheats, List<String> tags, List<String> notes) {
         this.title = title;
         this.description = description;
         this.cheats = cheats;
         this.tags = tags;
+        this.notes = notes;
     }
 
     @Override
@@ -29,7 +31,7 @@ public class CheatGroup extends MatchableModel {
             add(title);
             add(description);
             addAll(tags);
-
+            addAll(notes);
         }};
         if(recursive) {
             for (Cheat cheat : cheats) {
@@ -39,7 +41,8 @@ public class CheatGroup extends MatchableModel {
         return ret;
     }
 
+    @SuppressWarnings("unchecked")
     public CheatGroup cloneMe() {
-        return new CheatGroup(title, description, (List<Cheat>) ((ArrayList<Cheat>)cheats).clone(), tags);
+        return new CheatGroup(title, description, (List<Cheat>) ((ArrayList<Cheat>)cheats).clone(), tags, notes);
     }
 }

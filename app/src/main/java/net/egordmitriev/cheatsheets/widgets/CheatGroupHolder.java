@@ -46,6 +46,13 @@ public class CheatGroupHolder extends RecyclerViewHolder<CheatGroup> {
             CheatItemHolder viewHolder = CheatItemHolder.inflate(LayoutInflater.from(mActivity), mCheatsList, mActivity);
             viewHolder.onBind(data.cheats.get(i), i);
         }
+        if(data.notes != null && data.notes.size() > 0) {
+            for(int i = 0; i < data.notes.size(); i++) {
+                View view = NoteItemHolder.inflate(LayoutInflater.from(mActivity), mCheatsList, true);
+                NoteItemHolder holder = new NoteItemHolder(view);
+                holder.onBind(data.notes.get(i));
+            }
+        }
     }
 
     @OnClick(R.id.header)
