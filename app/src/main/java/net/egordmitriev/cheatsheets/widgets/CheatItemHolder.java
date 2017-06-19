@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import net.egordmitriev.cheatsheets.CheatSheets;
@@ -21,7 +20,6 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -32,67 +30,68 @@ public class CheatItemHolder extends ViewHolder<Cheat> {
 
     protected Activity mActivity;
 
-    @BindView(R.id.content_left)
-    TextView mContentLeft;
-
-    @BindView(R.id.content_right)
-    TextView mContentRight;
-
-    View mDescriptionRow;
-
-    TextView mDescription;
-
-    public CheatItemHolder(Activity activity, View contentRow, View descriptionRow) {
-        super(contentRow);
+    public CheatItemHolder(Activity activity, ViewGroup parent, Cheat data, int position) {
+        super(parent);
         mActivity = activity;
-        ButterKnife.bind(this, contentRow);
-        mDescription = ButterKnife.findById(descriptionRow, R.id.description);
-        mDescriptionRow = descriptionRow;
-    }
-
-    public void onBind(Cheat data, int position) {
-        onBind(data);
-
-        Utils.applyWorkaround(mContentLeft);
-        Utils.applyWorkaround(mContentRight);
-
+        LayoutInflater inf = activity.getLayoutInflater();
         try {
-            mContentLeft.setText(CodeSpannableBuilder.fromHtml(data.content.get(0)));
-            if (data.layout == 0 && data.content.size() > 1) {
-                mContentRight.setText(CodeSpannableBuilder.fromHtml(data.content.get(1)));
-            } else if (data.layout == 1 && !TextUtils.isEmpty(data.description)) {
-                mContentRight.setText(CodeSpannableBuilder.fromHtml(data.description));
-            } else {
-                mContentRight.setVisibility(View.GONE);
-                TableRow.LayoutParams params = (TableRow.LayoutParams) mContentLeft.getLayoutParams();
-                params.span = 2;
-                mContentLeft.setLayoutParams(params);
-            }
-            if (data.layout == 2 && !TextUtils.isEmpty(data.description)) {
-                Spannable span = CodeSpannableBuilder.fromHtml(data.description);
-                span.setSpan(
-                        new QuoteSpan(CheatSheets.getAppContext().getResources().getColor(R.color.quoteBorder), 8, 16),
-                        0, span.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                mDescription.setText(span);
-            } else {
-                mDescriptionRow.setVisibility(View.GONE);
-            }
-
+            inflateAndBind(inf, parent, data, position);
         } catch (ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }
-        mView.setBackgroundResource((position % 2 == 0) ? R.color.tableEven : R.color.tableUneven);
-        mDescriptionRow.setBackgroundResource((position % 2 == 0) ? R.color.tableEven : R.color.tableUneven);
+    }
+
+    private void inflateAndBind(LayoutInflater inflater, ViewGroup parent, Cheat data, int position) throws ParserConfigurationException, SAXException {
+        View contentRow = null;
+        View descRow = null;
+        TextView contentLeft = null;
+        TextView contentRight = null;
+        TextView contentDescription = null;
+        if((data.layout == 1 && !TextUtils.isEmpty(data.description)) || (data.layout == 0 && data.content.size() > 1)) {
+            contentRow = inflater.inflate(R.layout.cheat_layout_dual, parent, false);
+            if(data.layout == 1) {
+                contentDescription = ButterKnife.findById(contentRow, R.id.content_right);
+            } else {
+                contentRight = ButterKnife.findById(contentRow, R.id.content_right);
+            }
+        } else if(data.layout == 2 && !TextUtils.isEmpty(data.description)) {
+            contentRow = inflater.inflate(R.layout.cheat_layout_single, parent, false);
+            descRow = inflater.inflate(R.layout.cheat_layout_description, parent, false);
+            contentDescription = ButterKnife.findById(descRow, R.id.description);
+        } else {
+            contentRow = inflater.inflate(R.layout.cheat_layout_single, parent, false);
+        }
+        contentRow.setBackgroundResource((position % 2 == 0) ? R.color.tableEven : R.color.tableUneven);
+        parent.addView(contentRow);
+        if(descRow != null) {
+            descRow.setBackgroundResource((position % 2 == 0) ? R.color.tableEven : R.color.tableUneven);
+            parent.addView(descRow);
+        }
+
+        contentLeft = ButterKnife.findById(contentRow, R.id.content_left);
+        Utils.applyWorkaround(contentLeft);
+        contentLeft.setText(CodeSpannableBuilder.fromHtml(data.content.get(0)));
+        if(contentRight != null) {
+            Utils.applyWorkaround(contentRight);
+            contentRight.setText(CodeSpannableBuilder.fromHtml(data.content.get(1)));
+        }
+        if(contentDescription != null) {
+            Utils.applyWorkaround(contentDescription);
+            Spannable span = CodeSpannableBuilder.fromHtml(data.description);
+            if(data.layout == 2) {
+                span.setSpan(
+                        new QuoteSpan(CheatSheets.getAppContext().getResources().getColor(R.color.quoteBorder), 8, 16),
+                        0, span.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            contentDescription.setText(span);
+        }
+
+
+
     }
 
     @Override
     public void onBind(Cheat data) {
         super.onBind(data);
-    }
-
-    public static CheatItemHolder inflate(LayoutInflater inflater, ViewGroup parent, Activity activity) {
-        int tempI = parent.getChildCount();
-        View view = inflater.inflate(R.layout.cheat_item, parent, true);
-        return new CheatItemHolder(activity, parent.getChildAt(tempI), parent.getChildAt(tempI + 1));
     }
 }
