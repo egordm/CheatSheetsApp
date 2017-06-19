@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:minHeight="40dp"
     android:padding="@dimen/spacing_half"
-    >
+    android:background="@color/tableNote">
 
     <TextView
         android:id="@+id/note"
