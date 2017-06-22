@@ -48,7 +48,7 @@ public class DetailActivity extends SearchBarActivity {
         mCheatsheetContainer.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new CheatsheetAdapter(this);
         mCheatsheetContainer.setAdapter(mAdapter);
-        mAdapter.add(mCheatSheet.groups);
+        mAdapter.add(mCheatSheet.cheat_groups);
     }
 
     @Override
@@ -60,11 +60,11 @@ public class DetailActivity extends SearchBarActivity {
     public boolean onQueryTextSubmit(String query) {
         List<CheatGroup> data = new ArrayList<>();
         boolean empty = (query == null || query.isEmpty());
-        for(int i = 0; i < mCheatSheet.groups.size(); i++) {
-            boolean matchesCategory = empty || mCheatSheet.groups.get(i).matchesString(query, false);
-            if(matchesCategory || mCheatSheet.groups.get(i).matchesString(query, true)) {
+        for(int i = 0; i < mCheatSheet.cheat_groups.size(); i++) {
+            boolean matchesCategory = empty || mCheatSheet.cheat_groups.get(i).matchesString(query, false);
+            if(matchesCategory || mCheatSheet.cheat_groups.get(i).matchesString(query, true)) {
                 //TODO: expand
-                CheatGroup cheatGroup = mCheatSheet.groups.get(i).cloneMe();
+                CheatGroup cheatGroup = mCheatSheet.cheat_groups.get(i).cloneMe();
                 data.add(cheatGroup);
                 for(int j = cheatGroup.cheats.size() - 1; j >= 0 ; j--) {
                     Cheat cheatSheet = cheatGroup.cheats.get(j);

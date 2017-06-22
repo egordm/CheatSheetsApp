@@ -12,18 +12,18 @@ public class CheatSheet extends MatchableModel {
     public String title;
     public String subtitle;
     public String description;
-    public List<CheatGroup> groups;
+    public List<CheatGroup> cheat_groups;
     public List<String> tags;
 
     public CheatSheet() {
     }
 
-    public CheatSheet(String slug, String title, String subtitle, String description, List<CheatGroup> groups, List<String> tags) {
+    public CheatSheet(String slug, String title, String subtitle, String description, List<CheatGroup> cheat_groups, List<String> tags) {
         this.slug = slug;
         this.title = title;
         this.subtitle = subtitle;
         this.description = description;
-        this.groups = groups;
+        this.cheat_groups = cheat_groups;
         this.tags = tags;
     }
 

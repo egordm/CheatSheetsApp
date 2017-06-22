@@ -46,10 +46,10 @@ public class CategoryGroupHolder extends ViewHolder<Category> {
     public void onBind(Category data) {
         super.onBind(data);
         mTitle.setText(Html.fromHtml(data.title));
-        for(int i = 0; i < data.sheets.size(); i++) {
+        for(int i = 0; i < data.cheat_sheets.size(); i++) {
             View view = SheetItemHolder.inflate(LayoutInflater.from(mActivity), mSheetsList);
             SheetItemHolder viewHolder = new SheetItemHolder(mActivity, view);
-            viewHolder.onBind(data.sheets.get(i), i);
+            viewHolder.onBind(data.cheat_sheets.get(i), i);
         }
     }
 

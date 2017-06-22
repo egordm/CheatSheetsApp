@@ -47,7 +47,7 @@ public class CheatItemHolder extends ViewHolder<Cheat> {
         TextView contentLeft = null;
         TextView contentRight = null;
         TextView contentDescription = null;
-        if((data.layout == 1 && !TextUtils.isEmpty(data.description)) || (data.layout == 0 && data.content.size() > 1)) {
+        if((data.layout == 1 && !TextUtils.isEmpty(data.description)) || (data.layout == 0 && data.cheat_contents.size() > 1)) {
             contentRow = inflater.inflate(R.layout.cheat_layout_dual, parent, false);
             if(data.layout == 1) {
                 contentDescription = ButterKnife.findById(contentRow, R.id.content_right);
@@ -70,10 +70,10 @@ public class CheatItemHolder extends ViewHolder<Cheat> {
 
         contentLeft = ButterKnife.findById(contentRow, R.id.content_left);
         Utils.applyWorkaround(contentLeft);
-        contentLeft.setText(CodeSpannableBuilder.fromHtml(data.content.get(0)));
+        contentLeft.setText(CodeSpannableBuilder.fromHtml(data.cheat_contents.get(0)));
         if(contentRight != null) {
             Utils.applyWorkaround(contentRight);
-            contentRight.setText(CodeSpannableBuilder.fromHtml(data.content.get(1)));
+            contentRight.setText(CodeSpannableBuilder.fromHtml(data.cheat_contents.get(1)));
         }
         if(contentDescription != null) {
             Utils.applyWorkaround(contentDescription);

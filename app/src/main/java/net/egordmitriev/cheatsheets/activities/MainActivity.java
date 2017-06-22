@@ -47,8 +47,8 @@ public class MainActivity extends SearchBarActivity
             if(matchesCategory || mCategories.get(i).matchesString(query, true)) {
                 holder.collapse(false, true);
                 holder.getView().setVisibility(View.VISIBLE);
-                for(int j = 0; j < mCategories.get(i).sheets.size(); j++) {
-                    CheatSheet cheatSheet = mCategories.get(i).sheets.get(j);
+                for(int j = 0; j < mCategories.get(i).cheat_sheets.size(); j++) {
+                    CheatSheet cheatSheet = mCategories.get(i).cheat_sheets.get(j);
                     holder.getSheetsList().getChildAt(j).setVisibility(
                             (matchesCategory || cheatSheet.matchesString(query, false) ) ? View.VISIBLE : View.GONE
                     );

@@ -100,7 +100,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             mTitle.setText(Html.fromHtml(category.title));
             boolean even = false;
             mSheetsList.removeAllViews();
-           /* for(CheatSheet sheet : category.sheets) {
+           /* for(CheatSheet sheet : category.cheat_sheets) {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.cheatsheet_item, mSheetsList, false);
                 SheetItemHolder viewHolder = new SheetItemHolder(mAcview);
                 viewHolder.onBind(sheet);

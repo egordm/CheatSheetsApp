@@ -11,16 +11,16 @@ public class Category extends MatchableModel{
     public String slug;
     public String title;
     public String description;
-    public List<CheatSheet> sheets;
+    public List<CheatSheet> cheat_sheets;
 
     public Category() {
     }
 
-    public Category(String slug, String title, String description, List<CheatSheet> sheets) {
+    public Category(String slug, String title, String description, List<CheatSheet> cheat_sheets) {
         this.slug = slug;
         this.title = title;
         this.description = description;
-        this.sheets = sheets;
+        this.cheat_sheets = cheat_sheets;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class Category extends MatchableModel{
             add(description);
         }};
         if(recursive) {
-            for (CheatSheet cheatSheet : sheets) {
+            for (CheatSheet cheatSheet : cheat_sheets) {
                 ret.addAll(cheatSheet.getSearchableStrings(false));
             }
         }
