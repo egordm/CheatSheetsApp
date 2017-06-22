@@ -5,6 +5,8 @@ package net.egordmitriev.cheatsheets.utils;
  */
 
 public class Constants {
+    public static final String API_BASE_URL = "http://cheat-sheets.ga/";
+
     public static final long CACHE_LIFETIME = 604800000;
 
     public static final String CACHE_FILENAME_CATEGORIES = "categories";

@@ -3,7 +3,7 @@ package net.egordmitriev.cheatsheets.api;
 import net.egordmitriev.cheatsheets.pojo.Category;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -15,9 +15,9 @@ import retrofit2.http.Path;
 
 public interface CheatSheetService {
 
-    @GET("/")
-    Call<List<Category>> getCategories();
+    @GET("api")
+    Call<ArrayList<Category>> getCategories();
 
-    @GET("cheatsheet/{id}")
+    @GET("api/cheatsheet/{id}")
     Call<CheatSheet> getCheatSheet(@Path("id") int cheatSheetId);
 }

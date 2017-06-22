@@ -43,7 +43,7 @@ public class Utils {
         if (file.exists()) {
             Type retType = new TypeToken<CacheData<T>>() {}.getType();
             CacheData<T> data = sGson.fromJson(Utils.readFile(file), retType);
-            if (data.expires.after(new Date())) {
+            if (data.expires.after(new Date())) { //TODO: not connected = skip
                 file.delete();
             } else {
                 return data.data;

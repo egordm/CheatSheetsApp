@@ -1,21 +1,18 @@
 package net.egordmitriev.cheatsheets.api;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import net.egordmitriev.cheatsheets.CheatSheets;
-import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.pojo.Category;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
+import net.egordmitriev.cheatsheets.utils.Constants;
+import net.egordmitriev.cheatsheets.utils.DataCallback;
+import net.egordmitriev.cheatsheets.utils.Utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by EgorDm on 12-Jun-2017.
@@ -23,46 +20,23 @@ import java.util.List;
 
 public class API {
     public static final Gson sGson = new Gson();
+    public static final CheatSheetService sService = new Retrofit.Builder()
+            .baseUrl(Constants.API_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(CheatSheetService.class);
 
-    public static void requestCategories() {
-
+    public static void requestCategories(DataCallback<ArrayList<Category>> callback) {
+        ArrayList<Category> ret = Utils.readCache(Constants.CACHE_FILENAME_CATEGORIES);
+        if (ret != null) callback.onData(ret);
+        Call<ArrayList<Category>> call = sService.getCategories();
+        call.enqueue(callback);
     }
 
-    public static List<Category> getCategories() {
-        //todo: request data
-        try {
-            return readDataLocally();
-        } catch (IOException e) {
-            e.printStackTrace(); //TODO: handle exception correctly
-        }
-        return new ArrayList<>();
-    }
-
-    private static List<Category> readDataLocally() throws IOException {
-        //TODO: database? no json file?
-        InputStream rawData = CheatSheets.getAppContext().getResources().openRawResource(R.raw.data);
-        Reader reader = new BufferedReader(new InputStreamReader(rawData, "UTF8"));
-
-        Type retType = new TypeToken<ArrayList<Category>>(){}.getType();
-        return sGson.fromJson(reader, retType);
-    }
-
-    public static CheatSheet getCheatSheet(String slug) {
-        CheatSheet ret = getCheatsheetLocally(slug);
-        if(ret != null) return ret;
-        return requestCheatsheet(slug);
-    }
-
-    private static CheatSheet requestCheatsheet(String slug) {
-        return null; //TODO request
-    }
-
-    private static CheatSheet getCheatsheetLocally(String slug) {
-        for(Category category : getCategories()) { //TODO file or db
-            for(CheatSheet cheatSheet : category.cheat_sheets) {
-                if (cheatSheet.slug.equals(slug)) return cheatSheet;
-            }
-        }
-        return null;
+    public static void requestCheatSheet(DataCallback<CheatSheet> callback, int cheatSheetId) {
+        CheatSheet ret = Utils.readCache(Constants.CACHE_FILENAME_CHEATSHEET + cheatSheetId);
+        if (ret != null) callback.onData(ret);
+        Call<CheatSheet> call = sService.getCheatSheet(cheatSheetId);
+        call.enqueue(callback);
     }
 }
