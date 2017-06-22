@@ -69,14 +69,14 @@ public class CheatItemHolder extends ViewHolder<Cheat> {
         }
 
         contentLeft = ButterKnife.findById(contentRow, R.id.content_left);
-        Utils.applyWorkaround(contentLeft);
+        Utils.applyTextSpanWorkaround(contentLeft);
         contentLeft.setText(CodeSpannableBuilder.fromHtml(data.cheat_contents.get(0)));
         if(contentRight != null) {
-            Utils.applyWorkaround(contentRight);
+            Utils.applyTextSpanWorkaround(contentRight);
             contentRight.setText(CodeSpannableBuilder.fromHtml(data.cheat_contents.get(1)));
         }
         if(contentDescription != null) {
-            Utils.applyWorkaround(contentDescription);
+            Utils.applyTextSpanWorkaround(contentDescription);
             Spannable span = CodeSpannableBuilder.fromHtml(data.description);
             if(data.layout == 2) {
                 span.setSpan(

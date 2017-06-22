@@ -34,7 +34,7 @@ public class NoteItemHolder extends ViewHolder<String> {
     @Override
     public void onBind(String data) {
         super.onBind(data);
-        Utils.applyWorkaround(mTextView);
+        Utils.applyTextSpanWorkaround(mTextView);
         try {
             mTextView.setText(CodeSpannableBuilder.fromHtml(data));
         } catch (ParserConfigurationException | SAXException e) {

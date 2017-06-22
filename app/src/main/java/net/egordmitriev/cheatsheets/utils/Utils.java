@@ -32,7 +32,7 @@ public class Utils {
         return Math.max(min, Math.min(max, val));
     }
 
-    public static void applyWorkaround(TextView textView) {
+    public static void applyTextSpanWorkaround(TextView textView) {
         int padding = 12;
         textView.setShadowLayer(padding /* radius */, 0, 0, 0 /* transparent */);
         textView.setPadding(padding, padding, padding, padding);
