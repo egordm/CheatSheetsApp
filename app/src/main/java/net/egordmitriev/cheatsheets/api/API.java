@@ -22,7 +22,11 @@ import java.util.List;
  */
 
 public class API {
-    public static Gson sGson = new Gson();
+    public static final Gson sGson = new Gson();
+
+    public static void requestCategories() {
+
+    }
 
     public static List<Category> getCategories() {
         //todo: request data
@@ -55,7 +59,7 @@ public class API {
 
     private static CheatSheet getCheatsheetLocally(String slug) {
         for(Category category : getCategories()) { //TODO file or db
-            for(CheatSheet cheatSheet : category.sheets) {
+            for(CheatSheet cheatSheet : category.cheat_sheets) {
                 if (cheatSheet.slug.equals(slug)) return cheatSheet;
             }
         }
