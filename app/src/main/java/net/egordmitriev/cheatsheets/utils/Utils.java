@@ -43,7 +43,7 @@ public class Utils {
         if (file.exists()) {
             Type retType = TypeToken.getParameterized(CacheData.class, type).getType();
             CacheData<T> data = sGson.fromJson(Utils.readFile(file), retType);
-            if (data.expires.before(new Date())) { //TODO: not connected = skip
+            if (data.expires.before(new Date()) && CheatSheets.isNetworkAvailable()) {
                 file.delete();
             } else {
                 return data.data;
