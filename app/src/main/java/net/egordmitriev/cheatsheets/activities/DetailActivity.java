@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.adapters.CheatsheetAdapter;
@@ -12,12 +15,14 @@ import net.egordmitriev.cheatsheets.pojo.Cheat;
 import net.egordmitriev.cheatsheets.pojo.CheatGroup;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
+import net.egordmitriev.cheatsheets.widgets.CustomLoaderView;
 import net.egordmitriev.loaderview.LoaderView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by EgorDm on 14-Jun-2017.
@@ -31,7 +36,7 @@ public class DetailActivity extends SearchBarActivity {
     RecyclerView mCheatsheetContainer;
 
     @BindView(R.id.loaderview)
-    LoaderView mLoaderView;
+    CustomLoaderView mLoaderView;
 
     protected CheatSheet mCheatSheet;
 
@@ -97,14 +102,29 @@ public class DetailActivity extends SearchBarActivity {
     private DataCallback<CheatSheet> getCallback() {
         return new DataCallback<CheatSheet>() {
             @Override
+            public void init() {
+                super.init();
+                Button retryButton = ButterKnife.findById(mLoaderView, R.id.loaderview_retry);
+                retryButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (retry()) {
+                            mLoaderView.setState(LoaderView.STATE_LOADING);
+                        }
+                    }
+                });
+            }
+
+            @Override
             public void onData(CheatSheet data) {
                 setupWithData(data);
             }
 
             @Override
             public void onError(Throwable t) {
-                mLoaderView.setState(LoaderView.STATE_ERROR);
-                //TODO: show error;
+                TextView errorText = ButterKnife.findById(mLoaderView, R.id.loaderview_errormsg);
+                errorText.setText(t.getMessage());
+                mLoaderView.setState(LoaderView.STATE_ERROR, true);
             }
         };
     }

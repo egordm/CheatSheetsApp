@@ -16,7 +16,7 @@
 
         <include layout="@layout/content_main"/>
 
-        <net.egordmitriev.loaderview.LoaderView
+        <net.egordmitriev.cheatsheets.widgets.CustomLoaderView
             android:layout_marginTop="?actionBarSize"
             android:id="@+id/loaderview"
             app:loading_resourceID="@layout/component_loading"
