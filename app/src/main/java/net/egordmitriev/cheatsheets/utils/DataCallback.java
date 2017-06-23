@@ -11,7 +11,12 @@ import retrofit2.Response;
  */
 
 public abstract class DataCallback<T> implements Callback<T> {
+    public interface SuccessInterceptor<T> {
+        void success(T data);
+    }
+
     private Call<T> mCall;
+    private SuccessInterceptor<T> mInterceptor;
 
     public DataCallback() {
         init();
@@ -28,6 +33,7 @@ public abstract class DataCallback<T> implements Callback<T> {
             onFailure(call, new NullPointerException("Resource has not been found."));
             return;
         }
+        if(mInterceptor != null) mInterceptor.success(response.body());
         onData(response.body());
     }
 
@@ -46,5 +52,9 @@ public abstract class DataCallback<T> implements Callback<T> {
         if(mCall == null) return false;
         mCall.enqueue(this);
         return true;
+    }
+
+    public void setInterceptor(SuccessInterceptor<T> interceptor) {
+        mInterceptor = interceptor;
     }
 }

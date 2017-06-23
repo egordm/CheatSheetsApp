@@ -1,6 +1,7 @@
 package net.egordmitriev.cheatsheets.api;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import net.egordmitriev.cheatsheets.pojo.Category;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
@@ -8,6 +9,7 @@ import net.egordmitriev.cheatsheets.utils.Constants;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
 import net.egordmitriev.cheatsheets.utils.Utils;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -27,15 +29,35 @@ public class API {
             .create(CheatSheetService.class);
 
     public static void requestCategories(DataCallback<ArrayList<Category>> callback) {
-        ArrayList<Category> ret = Utils.readCache(Constants.CACHE_FILENAME_CATEGORIES);
-        if (ret != null) callback.onData(ret);
+        Type retType = new TypeToken<ArrayList<Category>>() {}.getType();
+        ArrayList<Category> ret = Utils.readCache(Constants.CACHE_FILENAME_CATEGORIES, retType);
+        if (ret != null) {
+            callback.onData(ret);
+            return;
+        }
+        callback.setInterceptor(new DataCallback.SuccessInterceptor<ArrayList<Category>>() {
+            @Override
+            public void success(ArrayList<Category> data) {
+                Utils.writeCache(data, Constants.CACHE_FILENAME_CATEGORIES);
+            }
+        });
         Call<ArrayList<Category>> call = sService.getCategories(); //TODO: save locally
         call.enqueue(callback);
     }
 
-    public static void requestCheatSheet(DataCallback<CheatSheet> callback, int cheatSheetId) {
-        CheatSheet ret = Utils.readCache(Constants.CACHE_FILENAME_CHEATSHEET + cheatSheetId);
-        if (ret != null) callback.onData(ret);
+    public static void requestCheatSheet(DataCallback<CheatSheet> callback, final int cheatSheetId) {
+        Type retType = new TypeToken<CheatSheet>() {}.getType();
+        CheatSheet ret = Utils.readCache(Constants.CACHE_FILENAME_CHEATSHEET + cheatSheetId, retType);
+        if (ret != null) {
+            callback.onData(ret);
+            return;
+        }
+        callback.setInterceptor(new DataCallback.SuccessInterceptor<CheatSheet>() {
+            @Override
+            public void success(CheatSheet data) {
+                Utils.writeCache(data, Constants.CACHE_FILENAME_CHEATSHEET + cheatSheetId);
+            }
+        });
         Call<CheatSheet> call = sService.getCheatSheet(cheatSheetId);
         call.enqueue(callback);
     }

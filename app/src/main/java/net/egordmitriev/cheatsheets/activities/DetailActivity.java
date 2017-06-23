@@ -54,12 +54,11 @@ public class DetailActivity extends SearchBarActivity {
             finish();
             return;
         }
-        API.requestCheatSheet(getCallback(), id);
-
-
         mCheatsheetContainer.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new CheatsheetAdapter(this);
         mCheatsheetContainer.setAdapter(mAdapter);
+
+        API.requestCheatSheet(getCallback(), id);
     }
 
     @Override

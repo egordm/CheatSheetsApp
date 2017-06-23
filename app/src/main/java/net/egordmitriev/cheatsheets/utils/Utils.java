@@ -38,12 +38,12 @@ public class Utils {
         textView.setPadding(padding, padding, padding, padding);
     }
 
-    public static <T> T readCache(String filename) {
-        File file = new File(CheatSheets.getAppContext().getCacheDir(), filename);
+    public static <T> T readCache(String filename, Type type) {
+        File file = new File(CheatSheets.getAppContext().getCacheDir(), filename+".json");
         if (file.exists()) {
-            Type retType = new TypeToken<CacheData<T>>() {}.getType();
+            Type retType = TypeToken.getParameterized(CacheData.class, type).getType();
             CacheData<T> data = sGson.fromJson(Utils.readFile(file), retType);
-            if (data.expires.after(new Date())) { //TODO: not connected = skip
+            if (data.expires.before(new Date())) { //TODO: not connected = skip
                 file.delete();
             } else {
                 return data.data;
@@ -55,15 +55,18 @@ public class Utils {
     public static <T> boolean writeCache(T data, String filename) {
         Date expires = new Date();
         expires.setTime(expires.getTime() + CACHE_LIFETIME);
-        CacheData<T> cacheData = new CacheData<T>(expires, data);
-        boolean success = false;
+        CacheData<T> cacheData = new CacheData<>(expires, data);
+        boolean success;
 
-        File file = new File(CheatSheets.getAppContext().getCacheDir(), filename);
+        File file = new File(CheatSheets.getAppContext().getCacheDir(), filename+".json");
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
             OutputStreamWriter outputWriter = new OutputStreamWriter(outputStream);
             BufferedWriter bufferedWriter = new BufferedWriter(outputWriter);
             bufferedWriter.write(sGson.toJson(cacheData));
+            bufferedWriter.close();
+            outputWriter.close();
+            outputStream.close();
             success = true;
         } catch(Exception ex) {
             ex.printStackTrace();
