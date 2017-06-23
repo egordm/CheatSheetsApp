@@ -6,6 +6,8 @@
 
     <string name="action_settings">Settings</string>
 
+    <string name="recently_opened">Recently opened</string>
+
     <string name="exception_unknown">Oh no! Something has gone wrong.</string>
     <string name="exception_null_pointer">Resource has not been found.</string>
     <string name="exception_no_network">Could not connect to our servers. Check you internet connection and try again.</string>

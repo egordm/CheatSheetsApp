@@ -15,6 +15,7 @@ import net.egordmitriev.cheatsheets.pojo.Cheat;
 import net.egordmitriev.cheatsheets.pojo.CheatGroup;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
+import net.egordmitriev.cheatsheets.utils.PreferenceManager;
 import net.egordmitriev.cheatsheets.widgets.CustomLoaderView;
 import net.egordmitriev.loaderview.LoaderView;
 
@@ -54,6 +55,8 @@ public class DetailActivity extends SearchBarActivity {
             finish();
             return;
         }
+        PreferenceManager.getInstance().putRecentlyOpened(id);
+
         mCheatsheetContainer.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new CheatsheetAdapter(this);
         mCheatsheetContainer.setAdapter(mAdapter);

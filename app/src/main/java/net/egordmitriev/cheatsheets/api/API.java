@@ -3,14 +3,18 @@ package net.egordmitriev.cheatsheets.api;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import net.egordmitriev.cheatsheets.CheatSheetsApp;
+import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.pojo.Category;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.utils.Constants;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
+import net.egordmitriev.cheatsheets.utils.PreferenceManager;
 import net.egordmitriev.cheatsheets.utils.Utils;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -29,7 +33,8 @@ public class API {
             .create(CheatSheetService.class);
 
     public static void requestCategories(DataCallback<ArrayList<Category>> callback) {
-        Type retType = new TypeToken<ArrayList<Category>>() {}.getType();
+        Type retType = new TypeToken<ArrayList<Category>>() {
+        }.getType();
         ArrayList<Category> ret = Utils.readCache(Constants.CACHE_FILENAME_CATEGORIES, retType);
         if (ret != null) {
             callback.onData(ret);
@@ -46,7 +51,8 @@ public class API {
     }
 
     public static void requestCheatSheet(DataCallback<CheatSheet> callback, final int cheatSheetId) {
-        Type retType = new TypeToken<CheatSheet>() {}.getType();
+        Type retType = new TypeToken<CheatSheet>() {
+        }.getType();
         CheatSheet ret = Utils.readCache(Constants.CACHE_FILENAME_CHEATSHEET + cheatSheetId, retType);
         if (ret != null) {
             callback.onData(ret);
@@ -60,5 +66,24 @@ public class API {
         });
         Call<CheatSheet> call = sService.getCheatSheet(cheatSheetId);
         call.enqueue(callback);
+    }
+
+    public static ArrayList<Category> addRecentlyOpened(ArrayList<Category> categories) {
+        List<Integer> recentIds = PreferenceManager.getInstance().getRecentlyOpened();
+        if (recentIds.size() == 0) return categories;
+
+        List<CheatSheet> recents = new ArrayList<>();
+        for (int id : recentIds) {
+            CheatSheet temp = Category.getCheatSheet(id, categories);
+            if (temp != null) recents.add(temp);
+        }
+        if (recents.size() == 0) return categories;
+
+        categories.add(0, new Category(
+                CheatSheetsApp.getAppContext().getString(R.string.recently_opened),
+                null,
+                recents
+        ));
+        return categories;
     }
 }

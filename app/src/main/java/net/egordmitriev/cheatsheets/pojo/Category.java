@@ -35,5 +35,21 @@ public class Category extends MatchableModel{
         return ret;
     }
 
+    public CheatSheet getCheatSheet(int id) {
+        for(CheatSheet cheatSheet : cheat_sheets) {
+            if(cheatSheet.id == id) {
+                return cheatSheet;
+            }
+        }
+        return null;
+    }
+
+    public static CheatSheet getCheatSheet(int id, List<Category> categories) {
+        for (Category category : categories) {
+            CheatSheet temp = category.getCheatSheet(id);
+            if(temp != null) return temp;
+        }
+        return null;
+    }
 
 }
