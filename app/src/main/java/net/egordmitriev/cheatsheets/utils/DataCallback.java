@@ -8,6 +8,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static net.egordmitriev.cheatsheets.api.API.sGson;
+
 /**
  * Created by EgorDm on 23-Jun-2017.
  */
@@ -17,7 +19,7 @@ public abstract class DataCallback<T> implements Callback<T> {
 
     @Override
     public void onResponse(@NonNull Call<T> call, @NonNull Response<T> response) {
-        Logger.d("Got online");
+        Logger.json(sGson.toJson(response.body()));
         onData(response.body());
     }
 

@@ -46,7 +46,7 @@
                     android:paddingStart="-16dp"
                     app:iconifiedByDefault="false"
                     app:queryBackground="@android:color/transparent"
-                    app:queryHint="Search for cheatsheets"
+                    app:queryHint="Search"
                     app:searchIcon="@null"/>
 
             </android.support.v7.widget.Toolbar>

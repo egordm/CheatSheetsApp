@@ -8,7 +8,6 @@ import java.util.List;
  */
 
 public class Category extends MatchableModel{
-    public String slug;
     public String title;
     public String description;
     public List<CheatSheet> cheat_sheets;
@@ -16,8 +15,7 @@ public class Category extends MatchableModel{
     public Category() {
     }
 
-    public Category(String slug, String title, String description, List<CheatSheet> cheat_sheets) {
-        this.slug = slug;
+    public Category(String title, String description, List<CheatSheet> cheat_sheets) {
         this.title = title;
         this.description = description;
         this.cheat_sheets = cheat_sheets;
@@ -26,7 +24,6 @@ public class Category extends MatchableModel{
     @Override
     protected List<String> getSearchableStrings(boolean recursive) {
         List<String> ret = new ArrayList<String>() {{
-            add(slug);
             add(title);
             add(description);
         }};

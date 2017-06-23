@@ -8,7 +8,7 @@ import java.util.List;
  */
 
 public class CheatSheet extends MatchableModel {
-    public String slug;
+    public int id;
     public String title;
     public String subtitle;
     public String description;
@@ -18,8 +18,8 @@ public class CheatSheet extends MatchableModel {
     public CheatSheet() {
     }
 
-    public CheatSheet(String slug, String title, String subtitle, String description, List<CheatGroup> cheat_groups, List<String> tags) {
-        this.slug = slug;
+    public CheatSheet(int id, String title, String subtitle, String description, List<CheatGroup> cheat_groups, List<String> tags) {
+        this.id = id;
         this.title = title;
         this.subtitle = subtitle;
         this.description = description;
@@ -30,7 +30,6 @@ public class CheatSheet extends MatchableModel {
     @Override
     protected List<String> getSearchableStrings(final boolean recursive) {
         return new ArrayList<String>() {{
-            add(slug);
             add(title);
             add(subtitle);
             add(description);

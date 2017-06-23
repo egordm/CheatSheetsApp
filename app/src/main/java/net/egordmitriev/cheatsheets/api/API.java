@@ -29,7 +29,7 @@ public class API {
     public static void requestCategories(DataCallback<ArrayList<Category>> callback) {
         ArrayList<Category> ret = Utils.readCache(Constants.CACHE_FILENAME_CATEGORIES);
         if (ret != null) callback.onData(ret);
-        Call<ArrayList<Category>> call = sService.getCategories();
+        Call<ArrayList<Category>> call = sService.getCategories(); //TODO: save locally
         call.enqueue(callback);
     }
 

@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
-
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.activities.DetailActivity;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
@@ -48,7 +46,7 @@ public class SheetItemHolder extends ViewHolder<CheatSheet>{
     @OnClick(R.id.wrapper)
     public void onClick() {
         Intent intent = new Intent(mActivity, DetailActivity.class);
-        intent.putExtra(DetailActivity.CHEATSHEET_SLUG_KEY, mData.slug);
+        intent.putExtra(DetailActivity.CHEATSHEET_ID_KEY, mData.id);
         mActivity.startActivity(intent);
 
     }
