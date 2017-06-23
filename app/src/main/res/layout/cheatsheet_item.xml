@@ -17,10 +17,4 @@
         android:text="Hello world"
         android:textAppearance="@style/AppTheme.TextAppearance.Group"/>
 
-    <ImageView
-        android:id="@+id/expandable_arrow"
-        android:layout_width="24dp"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_cloud"/>
-
 </LinearLayout>
