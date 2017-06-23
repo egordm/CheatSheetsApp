@@ -11,4 +11,5 @@
     <string name="exception_unknown">Oh no! Something has gone wrong.</string>
     <string name="exception_null_pointer">Resource has not been found.</string>
     <string name="exception_no_network">Could not connect to our servers. Check you internet connection and try again.</string>
+    <string name="action_about">About</string>
 </resources>

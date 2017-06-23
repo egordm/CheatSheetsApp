@@ -1,5 +1,8 @@
 package net.egordmitriev.cheatsheets.utils;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -86,5 +89,14 @@ public class Utils {
             //You'll need to add proper error handling here
         }
         return ret.toString();
+    }
+
+    public static void openPlayPage(Activity activity) {
+        final String appPackageName = activity.getPackageName(); // getPackageName() from Context or Activity object
+        try {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+        }
     }
 }

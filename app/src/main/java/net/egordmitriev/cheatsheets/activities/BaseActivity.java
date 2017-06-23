@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import net.egordmitriev.cheatsheets.R;
+import net.egordmitriev.cheatsheets.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,7 +90,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
+            return true;
+        } else*/ if (id == R.id.action_about) {
+            Utils.openPlayPage(this);
             return true;
         }
 
