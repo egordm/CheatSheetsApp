@@ -75,6 +75,7 @@ public class MainActivity extends SearchBarActivity
             CategoryGroupHolder holder = new CategoryGroupHolder(this, view);
             holder.onBind(category);
             mHolders.add(holder);
+            holder.collapse(false, true);
         }
         mLoaderView.setState(LoaderView.STATE_IDLE);
     }
