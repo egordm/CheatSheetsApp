@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.adapters.CheatsheetAdapter;
 import net.egordmitriev.cheatsheets.api.API;
@@ -56,6 +58,15 @@ public class DetailActivity extends SearchBarActivity {
             return;
         }
         PreferenceManager.getInstance().putRecentlyOpened(id);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         mCheatsheetContainer.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new CheatsheetAdapter(this);
@@ -129,5 +140,12 @@ public class DetailActivity extends SearchBarActivity {
                 mLoaderView.setState(LoaderView.STATE_ERROR, true);
             }
         };
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        Logger.d("Back!");
     }
 }
