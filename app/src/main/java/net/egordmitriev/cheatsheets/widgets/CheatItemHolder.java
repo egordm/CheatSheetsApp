@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.egordmitriev.cheatsheets.CheatSheets;
+import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.pojo.Cheat;
 import net.egordmitriev.cheatsheets.utils.Utils;
@@ -80,7 +80,7 @@ public class CheatItemHolder extends ViewHolder<Cheat> {
             Spannable span = CodeSpannableBuilder.fromHtml(data.description);
             if(data.layout == 2) {
                 span.setSpan(
-                        new QuoteSpan(CheatSheets.getAppContext().getResources().getColor(R.color.quoteBorder), 8, 16),
+                        new QuoteSpan(CheatSheetsApp.getAppContext().getResources().getColor(R.color.quoteBorder), 8, 16),
                         0, span.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             contentDescription.setText(span);

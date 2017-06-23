@@ -6,7 +6,7 @@ import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.text.style.ReplacementSpan;
 
-import net.egordmitriev.cheatsheets.CheatSheets;
+import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
 
 /**
@@ -30,13 +30,13 @@ public class KbdPartSpan extends ReplacementSpan { //TODO: merge with paragraph
         mBorderPaint = new Paint(){{
             setStyle(Style.FILL);
             setAntiAlias(true);
-            setColor(CheatSheets.getAppContext().getResources().getColor(R.color.kbdSpanBorder));
+            setColor(CheatSheetsApp.getAppContext().getResources().getColor(R.color.kbdSpanBorder));
         }};
 
         mBackgroundPaint = new Paint(){{
             setStyle(Style.FILL);
             setAntiAlias(true);
-            setColor(CheatSheets.getAppContext().getResources().getColor(R.color.kbdSpanBackground));
+            setColor(CheatSheetsApp.getAppContext().getResources().getColor(R.color.kbdSpanBackground));
         }};
     }
 

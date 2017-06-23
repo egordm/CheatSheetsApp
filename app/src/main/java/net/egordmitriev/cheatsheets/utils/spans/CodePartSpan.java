@@ -6,7 +6,7 @@ import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.text.style.ReplacementSpan;
 
-import net.egordmitriev.cheatsheets.CheatSheets;
+import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
 
 /**
@@ -28,13 +28,13 @@ public class CodePartSpan extends ReplacementSpan { //TODO: merge with paragraph
             setStyle(Paint.Style.STROKE);
             setAntiAlias(true);
             setStrokeWidth(3);
-            setColor(CheatSheets.getAppContext().getResources().getColor(R.color.codeSpanBorder));
+            setColor(CheatSheetsApp.getAppContext().getResources().getColor(R.color.codeSpanBorder));
         }};
 
         mBackgroundPaint = new Paint(){{
             setStyle(Style.FILL);
             setAntiAlias(true);
-            setColor(CheatSheets.getAppContext().getResources().getColor(R.color.codeSpanBackground));
+            setColor(CheatSheetsApp.getAppContext().getResources().getColor(R.color.codeSpanBackground));
         }};
     }
 

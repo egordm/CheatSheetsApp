@@ -2,7 +2,7 @@ package net.egordmitriev.cheatsheets.utils;
 
 import android.support.annotation.StringRes;
 
-import net.egordmitriev.cheatsheets.CheatSheets;
+import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
 
 import java.net.UnknownHostException;
@@ -31,6 +31,6 @@ public class LocalizedException extends Exception {
 
     @Override
     public String getMessage() {
-        return CheatSheets.getAppContext().getString(mMessageID);
+        return CheatSheetsApp.getAppContext().getString(mMessageID);
     }
 }

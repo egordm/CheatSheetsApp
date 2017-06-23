@@ -4,7 +4,7 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 
-import net.egordmitriev.cheatsheets.CheatSheets;
+import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.pojo.CacheData;
 
 import java.io.BufferedReader;
@@ -39,11 +39,11 @@ public class Utils {
     }
 
     public static <T> T readCache(String filename, Type type) {
-        File file = new File(CheatSheets.getAppContext().getCacheDir(), filename+".json");
+        File file = new File(CheatSheetsApp.getAppContext().getCacheDir(), filename+".json");
         if (file.exists()) {
             Type retType = TypeToken.getParameterized(CacheData.class, type).getType();
             CacheData<T> data = sGson.fromJson(Utils.readFile(file), retType);
-            if (data.expires.before(new Date()) && CheatSheets.isNetworkAvailable()) {
+            if (data.expires.before(new Date()) && CheatSheetsApp.isNetworkAvailable()) {
                 file.delete();
             } else {
                 return data.data;
@@ -58,7 +58,7 @@ public class Utils {
         CacheData<T> cacheData = new CacheData<>(expires, data);
         boolean success;
 
-        File file = new File(CheatSheets.getAppContext().getCacheDir(), filename+".json");
+        File file = new File(CheatSheetsApp.getAppContext().getCacheDir(), filename+".json");
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
             OutputStreamWriter outputWriter = new OutputStreamWriter(outputStream);

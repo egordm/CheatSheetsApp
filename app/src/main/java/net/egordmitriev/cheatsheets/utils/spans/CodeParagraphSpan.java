@@ -7,7 +7,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.text.style.LineBackgroundSpan;
 
-import net.egordmitriev.cheatsheets.CheatSheets;
+import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
 
 /**
@@ -29,13 +29,13 @@ public class CodeParagraphSpan implements LineBackgroundSpan {
             setStyle(Paint.Style.STROKE);
             setAntiAlias(true);
             setStrokeWidth(3);
-            setColor(CheatSheets.getAppContext().getResources().getColor(R.color.codeSpanBorder));
+            setColor(CheatSheetsApp.getAppContext().getResources().getColor(R.color.codeSpanBorder));
         }};
 
         mBackgroundPaint = new Paint(){{
             setStyle(Style.FILL);
             setAntiAlias(true);
-            setColor(CheatSheets.getAppContext().getResources().getColor(R.color.codeSpanBackground));
+            setColor(CheatSheetsApp.getAppContext().getResources().getColor(R.color.codeSpanBackground));
         }};
     }
 
