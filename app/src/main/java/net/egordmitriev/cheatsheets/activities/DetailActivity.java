@@ -5,8 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.orhanobut.logger.Logger;
-
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.adapters.CheatsheetAdapter;
 import net.egordmitriev.cheatsheets.api.API;
@@ -14,6 +12,7 @@ import net.egordmitriev.cheatsheets.pojo.Cheat;
 import net.egordmitriev.cheatsheets.pojo.CheatGroup;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
+import net.egordmitriev.loaderview.LoaderView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +30,9 @@ public class DetailActivity extends SearchBarActivity {
     @BindView(R.id.dataContainer)
     RecyclerView mCheatsheetContainer;
 
+    @BindView(R.id.loaderview)
+    LoaderView mLoaderView;
+
     protected CheatSheet mCheatSheet;
 
     protected CheatsheetAdapter mAdapter;
@@ -38,17 +40,15 @@ public class DetailActivity extends SearchBarActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLoaderView.setState(LoaderView.STATE_LOADING);
         int id = -1;
         if(getIntent() != null) {
             id = getIntent().getIntExtra(CHEATSHEET_ID_KEY, -1);
-            //mCheatSheet = API.getCheatSheet(slug);
         }
         if (id == -1) {
             finish();
             return;
         }
-
-        Logger.d("Find sheet id:" + id);
         API.requestCheatSheet(getCallback(), id);
 
 
@@ -91,6 +91,7 @@ public class DetailActivity extends SearchBarActivity {
         mCheatSheet = data;
         mSearchView.setQueryHint("Search in "+mCheatSheet.title);
         mAdapter.add(mCheatSheet.cheat_groups);
+        mLoaderView.setState(LoaderView.STATE_IDLE);
     }
 
     private DataCallback<CheatSheet> getCallback() {
@@ -102,6 +103,7 @@ public class DetailActivity extends SearchBarActivity {
 
             @Override
             public void onError(Throwable t) {
+                mLoaderView.setState(LoaderView.STATE_ERROR);
                 //TODO: show error;
             }
         };

@@ -11,6 +11,7 @@ import net.egordmitriev.cheatsheets.pojo.Category;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
 import net.egordmitriev.cheatsheets.widgets.CategoryGroupHolder;
+import net.egordmitriev.loaderview.LoaderView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +24,16 @@ public class MainActivity extends SearchBarActivity
     @BindView(R.id.dataContainer)
     LinearLayout mCategoryContainer;
 
+    @BindView(R.id.loaderview)
+    LoaderView mLoaderView;
+
     private List<Category> mCategories;
     private List<CategoryGroupHolder> mHolders;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLoaderView.setState(LoaderView.STATE_LOADING);
         API.requestCategories(getCallback());
     }
 
@@ -66,6 +71,7 @@ public class MainActivity extends SearchBarActivity
             holder.onBind(category);
             mHolders.add(holder);
         }
+        mLoaderView.setState(LoaderView.STATE_IDLE);
     }
 
     private DataCallback<ArrayList<Category>> getCallback() {
@@ -77,6 +83,7 @@ public class MainActivity extends SearchBarActivity
 
             @Override
             public void onError(Throwable t) {
+                mLoaderView.setState(LoaderView.STATE_ERROR);
                 //TODO: show error;
             }
         };
