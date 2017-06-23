@@ -68,7 +68,7 @@ public class MainActivity extends SearchBarActivity
     private void setupWithData(ArrayList<Category> data) {
         data = API.addRecentlyOpened(data);
         mSearchView.setQueryHint("Search for cheatsheets");
-        mCategories = data; //TODO: switch between loader
+        mCategories = data;
         mHolders = new ArrayList<>();
         for (Category category : mCategories) {
             View view = CategoryGroupHolder.inflate(getLayoutInflater(), mCategoryContainer);

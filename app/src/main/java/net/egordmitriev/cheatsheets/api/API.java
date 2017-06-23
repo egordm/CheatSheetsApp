@@ -46,7 +46,7 @@ public class API {
                 Utils.writeCache(data, Constants.CACHE_FILENAME_CATEGORIES);
             }
         });
-        Call<ArrayList<Category>> call = sService.getCategories(); //TODO: save locally
+        Call<ArrayList<Category>> call = sService.getCategories();
         call.enqueue(callback);
     }
 

@@ -24,8 +24,6 @@ import static net.egordmitriev.cheatsheets.utils.Constants.CACHE_LIFETIME;
  * Created by EgorDm on 12-Jun-2017.
  */
 
-//TODO network
-
 public class Utils {
 
     public static int clamp(int val, int min, int max) {
