@@ -6,33 +6,42 @@
     android:minHeight="40dp"
     android:padding="@dimen/spacing_half">
 
-    <TextView
+    <TableLayout
         android:layout_weight="1"
-        android:id="@+id/description"
         android:layout_span="2"
-        android:bufferType="spannable"
-        android:gravity="center_vertical"
-        android:lineSpacingExtra="8dp"
-        android:textAppearance="@style/AppTheme.TextAppearance.CodeSpanText"
-        android:textSize="13sp"/>
+        android:stretchColumns="*"
+        android:shrinkColumns="*">
 
-    <TextView
-        android:layout_weight="1"
-        android:id="@+id/content_left"
-        android:layout_span="2"
-        android:bufferType="spannable"
-        android:gravity="center_vertical"
-        android:lineSpacingExtra="8dp"
-        android:textAppearance="@style/AppTheme.TextAppearance.CodeSpanText"
-        android:textSize="13sp"/>
+        <TableRow>
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/description"
+                android:layout_span="2"
+                android:bufferType="spannable"
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="8dp"
+                android:textAppearance="@style/AppTheme.TextAppearance.CodeSpanText"
+                android:textSize="13sp"/>
 
-    <TextView
-        android:layout_weight="1"
-        android:id="@+id/content_right"
-        android:layout_span="2"
-        android:bufferType="spannable"
-        android:gravity="center_vertical"
-        android:lineSpacingExtra="8dp"
-        android:textAppearance="@style/AppTheme.TextAppearance.CodeSpanText"
-        android:textSize="13sp"/>
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/content_left"
+                android:layout_span="2"
+                android:bufferType="spannable"
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="8dp"
+                android:textAppearance="@style/AppTheme.TextAppearance.CodeSpanText"
+                android:textSize="13sp"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/content_right"
+                android:layout_span="2"
+                android:bufferType="spannable"
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="8dp"
+                android:textAppearance="@style/AppTheme.TextAppearance.CodeSpanText"
+                android:textSize="13sp"/>
+        </TableRow>
+    </TableLayout>
 </TableRow>
