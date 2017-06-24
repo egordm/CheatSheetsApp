@@ -51,7 +51,9 @@
             <TableLayout
                 android:id="@+id/expandable_contents"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:stretchColumns="*"
+                android:shrinkColumns="*"/>
 
         </net.cachapa.expandablelayout.ExpandableLayout>
     </LinearLayout>

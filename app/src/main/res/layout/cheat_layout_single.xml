@@ -8,8 +8,8 @@
 
     <TextView
         android:id="@+id/content_left"
+        android:layout_span="6"
         android:layout_weight="1"
-        android:layout_span="2"
         android:bufferType="spannable"
         android:gravity="center_vertical"
         android:lineSpacingExtra="8dp"

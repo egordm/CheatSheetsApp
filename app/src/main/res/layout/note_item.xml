@@ -3,18 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/tableNote"
     android:minHeight="40dp"
-    android:padding="@dimen/spacing_half"
-    android:background="@color/tableNote">
+    android:padding="@dimen/spacing_half">
 
     <TextView
-        android:id="@+id/note"
         android:layout_weight="1"
+        android:id="@+id/note"
+        android:layout_span="6"
         android:bufferType="spannable"
         android:gravity="center_vertical"
         android:lineSpacingExtra="8dp"
         android:textAppearance="@style/AppTheme.TextAppearance.CodeSpanText"
-        android:textSize="13sp"
-        android:layout_span="2"/>
+        android:textSize="13sp"/>
 
 </TableRow>
