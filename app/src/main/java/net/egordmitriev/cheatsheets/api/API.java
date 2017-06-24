@@ -3,6 +3,7 @@ package net.egordmitriev.cheatsheets.api;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import net.egordmitriev.cheatsheets.BuildConfig;
 import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.pojo.Category;
@@ -35,7 +36,10 @@ public class API {
     public static void requestCategories(DataCallback<ArrayList<Category>> callback) {
         Type retType = new TypeToken<ArrayList<Category>>() {
         }.getType();
-        ArrayList<Category> ret = Utils.readCache(Constants.CACHE_FILENAME_CATEGORIES, retType);
+        ArrayList<Category> ret = null;
+        if (!BuildConfig.DEBUG) {
+            ret = Utils.readCache(Constants.CACHE_FILENAME_CATEGORIES, retType);
+        }
         if (ret != null) {
             callback.onData(ret);
             return;
@@ -53,7 +57,10 @@ public class API {
     public static void requestCheatSheet(DataCallback<CheatSheet> callback, final int cheatSheetId) {
         Type retType = new TypeToken<CheatSheet>() {
         }.getType();
-        CheatSheet ret = Utils.readCache(Constants.CACHE_FILENAME_CHEATSHEET + cheatSheetId, retType);
+        CheatSheet ret = null;
+        if (!BuildConfig.DEBUG) {
+            ret = Utils.readCache(Constants.CACHE_FILENAME_CHEATSHEET + cheatSheetId, retType);
+        }
         if (ret != null) {
             callback.onData(ret);
             return;
