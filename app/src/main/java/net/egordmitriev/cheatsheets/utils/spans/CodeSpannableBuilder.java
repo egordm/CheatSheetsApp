@@ -49,6 +49,7 @@ public class CodeSpannableBuilder {
 
         public CodeContentHandler(XMLReader reader, String source) {
             mReader = reader;
+            source = source.replace("<br>", "<br/>");
             mSource = "<root>" + source + "</root>";
             mSpannableBuilder = new SpannableStringBuilder();
         }
