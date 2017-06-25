@@ -8,6 +8,7 @@ import java.util.List;
  */
 
 public class Category extends MatchableModel{
+    public boolean temp;
     public String title;
     public String description;
     public List<CheatSheet> cheat_sheets;

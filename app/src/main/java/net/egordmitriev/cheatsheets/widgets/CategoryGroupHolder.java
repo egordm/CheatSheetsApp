@@ -76,9 +76,13 @@ public class CategoryGroupHolder extends ViewHolder<Category> {
         }
     }
 
-    public static View inflate(LayoutInflater inflater, ViewGroup parent) {
+    public static View inflate(LayoutInflater inflater, ViewGroup parent, boolean bind) {
         View view = inflater.inflate(R.layout.group_item, parent, false);
-        parent.addView(view);
+        if(bind) parent.addView(view);
         return view;
+    }
+
+    public Category getCategory() {
+        return mData;
     }
 }

@@ -75,22 +75,26 @@ public class API {
         call.enqueue(callback);
     }
 
-    public static ArrayList<Category> addRecentlyOpened(ArrayList<Category> categories) {
+    public static Category addRecentlyOpened(List<Category> categories) {
         List<Integer> recentIds = PreferenceManager.getInstance().getRecentlyOpened();
-        if (recentIds.size() == 0) return categories;
+        if (recentIds.size() == 0) return null;
+        for (int i = categories.size() - 1; i >= 0; i--) {
+            if (categories.get(i).temp) categories.remove(i);
+        }
 
         List<CheatSheet> recents = new ArrayList<>();
         for (int id : recentIds) {
             CheatSheet temp = Category.getCheatSheet(id, categories);
             if (temp != null) recents.add(temp);
         }
-        if (recents.size() == 0) return categories;
+        if (recents.size() == 0) return null;
 
-        categories.add(0, new Category(
+        Category ret = new Category(
                 CheatSheetsApp.getAppContext().getString(R.string.recently_opened),
                 null,
                 recents
-        ));
-        return categories;
+        );
+        ret.temp = true;
+        return ret;
     }
 }

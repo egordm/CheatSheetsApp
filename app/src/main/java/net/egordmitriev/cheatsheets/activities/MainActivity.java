@@ -38,7 +38,14 @@ public class MainActivity extends SearchBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLoaderView.setState(LoaderView.STATE_LOADING);
+        mSearchView.setQueryHint("Search for cheatsheets");
         API.requestCategories(getCallback());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        addRecents(mCategories);
     }
 
     @Override
@@ -65,19 +72,41 @@ public class MainActivity extends SearchBarActivity
         return true;
     }
 
-    private void setupWithData(ArrayList<Category> data) {
-        data = API.addRecentlyOpened(data);
-        mSearchView.setQueryHint("Search for cheatsheets");
+    private void setupWithData(List<Category> data) {
         mCategories = data;
         mHolders = new ArrayList<>();
+        mCategoryContainer.removeAllViews();
+        addRecents(data);
         for (Category category : mCategories) {
-            View view = CategoryGroupHolder.inflate(getLayoutInflater(), mCategoryContainer);
-            CategoryGroupHolder holder = new CategoryGroupHolder(this, view);
-            holder.onBind(category);
-            mHolders.add(holder);
-            holder.collapse(false, true);
+           addCategory(category);
         }
         mLoaderView.setState(LoaderView.STATE_IDLE);
+    }
+
+    public void addCategory(Category category) {
+        View view = CategoryGroupHolder.inflate(getLayoutInflater(), mCategoryContainer, true);
+        CategoryGroupHolder holder = new CategoryGroupHolder(this, view);
+        holder.onBind(category);
+        mHolders.add(holder);
+        holder.collapse(false, true);
+    }
+
+    public void addRecents(List<Category> data) {
+        if(data == null || data.isEmpty()) return;
+        if(mHolders != null && !mHolders.isEmpty()) {
+            for(CategoryGroupHolder holder : mHolders) {
+                if(holder.getCategory().temp) mCategoryContainer.removeView(holder.getView());
+            }
+        }
+
+        Category recents = API.addRecentlyOpened(data);
+        View view = CategoryGroupHolder.inflate(getLayoutInflater(), mCategoryContainer, false);
+        mCategoryContainer.addView(view, 0);
+        CategoryGroupHolder holder = new CategoryGroupHolder(this, view);
+        holder.onBind(recents);
+        mHolders.add(0, holder);
+        holder.collapse(false, true);
+
     }
 
     private DataCallback<ArrayList<Category>> getCallback() {
