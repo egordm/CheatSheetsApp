@@ -11,7 +11,6 @@ import android.widget.TextView;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.adapters.CheatsheetAdapter;
 import net.egordmitriev.cheatsheets.api.API;
-import net.egordmitriev.cheatsheets.pojo.Cheat;
 import net.egordmitriev.cheatsheets.pojo.CheatGroup;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
@@ -82,23 +81,11 @@ public class DetailActivity extends SearchBarActivity {
     public boolean onQueryTextSubmit(String query) {
         if(mCheatSheet == null) return false;
         List<CheatGroup> data = new ArrayList<>();
-        boolean empty = (query == null || query.isEmpty());
-        for(int i = 0; i < mCheatSheet.cheat_groups.size(); i++) {
-            boolean matchesCategory = empty || mCheatSheet.cheat_groups.get(i).matchesString(query, false);
-            if(matchesCategory || mCheatSheet.cheat_groups.get(i).matchesString(query, true)) {
-                //TODO: expand
-                CheatGroup cheatGroup = mCheatSheet.cheat_groups.get(i).cloneMe();
-                data.add(cheatGroup);
-                for(int j = cheatGroup.cheats.size() - 1; j >= 0 ; j--) {
-                    Cheat cheatSheet = cheatGroup.cheats.get(j);
-                    if(!(matchesCategory || cheatSheet.matchesString(query, false))) {
-                        cheatGroup.cheats.remove(j);
-                    }
-                }
-            } else {
-                //TODO: collapse
-            }
+        for (CheatGroup cheatGroup : mCheatSheet.cheat_groups) {
+            CheatGroup temp = cheatGroup.applyQuery(query);
+            if (temp != null) data.add(temp);
         }
+
         mAdapter.replaceAll(data);
         return true;
     }
