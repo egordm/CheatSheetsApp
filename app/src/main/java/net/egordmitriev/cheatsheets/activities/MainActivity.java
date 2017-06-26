@@ -60,7 +60,9 @@ public class MainActivity extends SearchBarActivity
                 holder.getView().setVisibility(View.VISIBLE);
                 for (int j = 0; j < mCategories.get(i).cheat_sheets.size(); j++) {
                     CheatSheet cheatSheet = mCategories.get(i).cheat_sheets.get(j);
-                    holder.getSheetsList().getChildAt(j).setVisibility(
+                    View child = holder.getSheetsList().getChildAt(j);
+                    if(child == null) continue; //TODO: weird null pointer. Mb because of recents?
+                    child.setVisibility(
                             (matchesCategory || cheatSheet.matchesString(query, false)) ? View.VISIBLE : View.GONE
                     );
                 }
