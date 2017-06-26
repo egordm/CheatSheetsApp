@@ -42,7 +42,8 @@ public class CodeParagraphSpan implements LineBackgroundSpan {
     @Override
     public void drawBackground(Canvas c, Paint p, int left, int right, int top, int baseline, int bottom, CharSequence text, int start, int end, int lnum) {
         Paint pain = new Paint(p);
-        Typeface tf = Typeface.create("monospace", p.getTypeface().getStyle());
+        Typeface oldTypeface = p.getTypeface();
+        Typeface tf = Typeface.create("monospace", (oldTypeface != null) ? oldTypeface.getStyle() : 0);
         pain.setTypeface(tf);
 
         Rect bounds = new Rect();
