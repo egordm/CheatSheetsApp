@@ -61,6 +61,8 @@ public abstract class AdvancedRecyclerAdapter<TD extends MatchableModel, TVH ext
             final TD model = mData.get(i);
             if (!models.contains(model)) {
                 mData.remove(model);
+            } else {
+                models.remove(model);
             }
         }
         if(mData.size() == models.size()) return; //Arrays are identical. Nothing to add
