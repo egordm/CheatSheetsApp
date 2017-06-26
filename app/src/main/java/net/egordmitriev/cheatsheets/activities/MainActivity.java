@@ -84,6 +84,8 @@ public class MainActivity extends SearchBarActivity
         }
 
         Category recents = API.addRecentlyOpened(data);
+        if(recents == null) return;
+
         View view = CategoryGroupHolder.inflate(getLayoutInflater(), mCategoryContainer, false);
         mCategoryContainer.addView(view, 0);
         CategoryGroupHolder holder = new CategoryGroupHolder(this, view);
