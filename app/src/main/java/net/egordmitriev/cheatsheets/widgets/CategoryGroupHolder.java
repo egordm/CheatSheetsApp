@@ -2,6 +2,7 @@ package net.egordmitriev.cheatsheets.widgets;
 
 import android.app.Activity;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,9 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.listeners.ExpansionArrowListener;
 import net.egordmitriev.cheatsheets.pojo.Category;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +38,7 @@ public class CategoryGroupHolder extends ViewHolder<Category> {
     @BindView(R.id.expandable_contents)
     LinearLayout mSheetsList;
 
+    List<SheetItemHolder> mItemHolders = new ArrayList<>();
 
     public CategoryGroupHolder(Activity activity, View view) {
         super(view);
@@ -46,10 +51,12 @@ public class CategoryGroupHolder extends ViewHolder<Category> {
     public void onBind(Category data) {
         super.onBind(data);
         mTitle.setText(Html.fromHtml(data.title));
+        mItemHolders.clear();
         for(int i = 0; i < data.cheat_sheets.size(); i++) {
             View view = SheetItemHolder.inflate(LayoutInflater.from(mActivity), mSheetsList);
             SheetItemHolder viewHolder = new SheetItemHolder(mActivity, view);
             viewHolder.onBind(data.cheat_sheets.get(i), i);
+            mItemHolders.add(viewHolder);
         }
     }
 
@@ -84,5 +91,26 @@ public class CategoryGroupHolder extends ViewHolder<Category> {
 
     public Category getCategory() {
         return mData;
+    }
+
+    public boolean applyQuery(String query) {
+        if(TextUtils.isEmpty(query) || mData.matchesString(query, false)) {
+            forceVisibility(true);
+            return true;
+        }
+        boolean visible = false;
+        for(SheetItemHolder holder : mItemHolders) {
+            if(holder.applyQuery(query)) visible = true;
+        }
+        getView().setVisibility(visible ? View.VISIBLE : View.GONE);
+        return visible;
+    }
+
+    public void forceVisibility(boolean visible) {
+        getView().setVisibility(visible ? View.VISIBLE : View.GONE);
+        collapse(!visible, true);
+        for (SheetItemHolder holder : mItemHolders) {
+            holder.forceVisibility(visible);
+        }
     }
 }

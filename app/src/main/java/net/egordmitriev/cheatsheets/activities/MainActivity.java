@@ -10,7 +10,6 @@ import android.widget.TextView;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.api.API;
 import net.egordmitriev.cheatsheets.pojo.Category;
-import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
 import net.egordmitriev.cheatsheets.widgets.CategoryGroupHolder;
 import net.egordmitriev.cheatsheets.widgets.CustomLoaderView;
@@ -51,25 +50,8 @@ public class MainActivity extends SearchBarActivity
     @Override
     public boolean onQueryTextSubmit(String query) {
         if (mCategories == null) return false;
-        boolean empty = (query == null || query.isEmpty());
-        for (int i = 0; i < mCategories.size(); i++) {
-            CategoryGroupHolder holder = mHolders.get(i);
-            boolean matchesCategory = empty || mCategories.get(i).matchesString(query, false);
-            if (matchesCategory || mCategories.get(i).matchesString(query, true)) {
-                holder.collapse(false, true);
-                holder.getView().setVisibility(View.VISIBLE);
-                for (int j = 0; j < mCategories.get(i).cheat_sheets.size(); j++) {
-                    CheatSheet cheatSheet = mCategories.get(i).cheat_sheets.get(j);
-                    View child = holder.getSheetsList().getChildAt(j);
-                    if(child == null) continue; //TODO: weird null pointer. Mb because of recents?
-                    child.setVisibility(
-                            (matchesCategory || cheatSheet.matchesString(query, false)) ? View.VISIBLE : View.GONE
-                    );
-                }
-            } else {
-                holder.collapse(true, true);
-                mHolders.get(i).getView().setVisibility(View.GONE);
-            }
+        for(CategoryGroupHolder holder : mHolders) {
+            holder.applyQuery(query);
         }
         return true;
     }
