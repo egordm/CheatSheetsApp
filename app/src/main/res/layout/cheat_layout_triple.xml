@@ -21,7 +21,8 @@
                 android:gravity="center_vertical"
                 android:lineSpacingExtra="8dp"
                 android:textAppearance="@style/AppTheme.TextAppearance.CodeSpanText"
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                android:textIsSelectable="true"/>
 
             <TextView
                 android:layout_weight="1"
@@ -31,7 +32,8 @@
                 android:gravity="center_vertical"
                 android:lineSpacingExtra="8dp"
                 android:textAppearance="@style/AppTheme.TextAppearance.CodeSpanText"
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                android:textIsSelectable="true"/>
 
             <TextView
                 android:layout_weight="1"
@@ -41,7 +43,8 @@
                 android:gravity="center_vertical"
                 android:lineSpacingExtra="8dp"
                 android:textAppearance="@style/AppTheme.TextAppearance.CodeSpanText"
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                android:textIsSelectable="true"/>
         </TableRow>
     </TableLayout>
 </TableRow>

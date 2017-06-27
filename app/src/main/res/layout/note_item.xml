@@ -15,6 +15,7 @@
         android:lineSpacingExtra="8dp"
         android:textAppearance="@style/AppTheme.TextAppearance.CodeSpanText"
         android:textSize="13sp"
-        android:layout_span="2"/>
+        android:layout_span="2"
+        android:textIsSelectable="true"/>
 
 </TableRow>
