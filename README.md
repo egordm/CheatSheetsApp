@@ -12,11 +12,12 @@
 Programming Cheat Sheets - has more than 20 different cheat sheets to boost your productivity. App does not limit cheat sheets only to programming languages but also explores shortcuts for different applications and lists with good practises.
 
 ## Screenshots:
-
+<p>
 <img src='https://raw.githubusercontent.com/EgorDm/CheatSheetsApp/master/design/screenshots/Screenshot_2017-06-26-22-26-53-578_net.egordmitriev.cheatsheets.png' width=200/>
 <img src='https://raw.githubusercontent.com/EgorDm/CheatSheetsApp/master/design/screenshots/Screenshot_2017-06-26-22-29-39-679_net.egordmitriev.cheatsheets.png' width=200/>
 <img src='https://raw.githubusercontent.com/EgorDm/CheatSheetsApp/master/design/screenshots/Screenshot_2017-06-26-22-29-59-825_net.egordmitriev.cheatsheets.png' width=200/>
 <img src='https://raw.githubusercontent.com/EgorDm/CheatSheetsApp/master/design/screenshots/Screenshot_2017-06-26-22-31-07-054_net.egordmitriev.cheatsheets.png' width=200/>
+<p/>
 
 ## Help and Contributing
 This app is completely Open Source. Feel free to contribute or submit issues if you have any. You can find code for app and backend on my github profile.
