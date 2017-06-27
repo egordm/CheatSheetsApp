@@ -29,7 +29,7 @@ import static net.egordmitriev.cheatsheets.utils.Constants.CACHE_LIFETIME;
  * Created by EgorDm on 12-Jun-2017.
  */
 
-public class Utils {
+public class Utils { //Test
 
     public static final Pattern URL_PATTERN = Pattern.compile("[a-z]+:\\/\\/[^ \\n]*");
 
