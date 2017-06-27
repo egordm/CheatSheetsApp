@@ -3,6 +3,7 @@ package net.egordmitriev.cheatsheets.utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.util.Linkify;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import static net.egordmitriev.cheatsheets.api.API.sGson;
 import static net.egordmitriev.cheatsheets.utils.Constants.CACHE_LIFETIME;
@@ -28,6 +30,13 @@ import static net.egordmitriev.cheatsheets.utils.Constants.CACHE_LIFETIME;
  */
 
 public class Utils {
+
+    public static final Pattern URL_PATTERN = Pattern.compile("[a-z]+:\\/\\/[^ \\n]*");
+
+    public static void applyLinks(TextView textView) {
+        textView.setLinksClickable(true);
+        Linkify.addLinks(textView, URL_PATTERN, "");
+    }
 
     public static int clamp(int val, int min, int max) {
         return Math.max(min, Math.min(max, val));

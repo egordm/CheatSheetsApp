@@ -37,6 +37,7 @@ public class NoteItemHolder extends ViewHolder<String> {
         Utils.applyTextSpanWorkaround(mTextView);
         try {
             mTextView.setText(CodeSpannableBuilder.fromHtml(data));
+            Utils.applyLinks(mTextView);
         } catch (ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }
