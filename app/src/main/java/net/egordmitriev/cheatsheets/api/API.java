@@ -86,7 +86,7 @@ public class API {
         if (sCachedIds != null) return sCachedIds;
 
         sCachedIds = new ArrayList<>();
-        File cacheDir = CheatSheetsApp.getAppContext().getCacheDir();
+        File cacheDir = CheatSheetsApp.getAppContext().getFilesDir();
         for (File f : cacheDir.listFiles()) {
             if (f.isFile()) {
                 String name = f.getName();
