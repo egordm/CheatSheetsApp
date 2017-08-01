@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by EgorDm on 22-Jun-2017.
@@ -16,7 +17,7 @@ import retrofit2.http.Path;
 public interface CheatSheetService {
 
     @GET("api")
-    Call<ArrayList<Category>> getCategories();
+    Call<ArrayList<Category>> getCategories(@Query("beta") int beta);
 
     @GET("api/cheatsheet/{id}")
     Call<CheatSheet> getCheatSheet(@Path("id") int cheatSheetId);

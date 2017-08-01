@@ -53,7 +53,7 @@ public class API {
                 Utils.writeCache(data, Constants.CACHE_FILENAME_CATEGORIES);
             }
         });
-        Call<ArrayList<Category>> call = sService.getCategories();
+        Call<ArrayList<Category>> call = sService.getCategories(Constants.BETA_BUILD ? 1 : 0);
         call.enqueue(callback);
     }
 
