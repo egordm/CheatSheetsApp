@@ -14,6 +14,7 @@ public class CheatSheet extends MatchableModel {
     public String description;
     public List<CheatGroup> cheat_groups;
     public List<String> tags;
+    public boolean isLocal;
 
     public CheatSheet() {
     }

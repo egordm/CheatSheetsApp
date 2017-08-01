@@ -13,9 +13,12 @@ import net.egordmitriev.cheatsheets.utils.DataCallback;
 import net.egordmitriev.cheatsheets.utils.PreferenceManager;
 import net.egordmitriev.cheatsheets.utils.Utils;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -37,7 +40,7 @@ public class API {
         Type retType = new TypeToken<ArrayList<Category>>() {
         }.getType();
         ArrayList<Category> ret = null;
-        if (!BuildConfig.DEBUG) {
+        if (Constants.USE_CACHE) {
             ret = Utils.readCache(Constants.CACHE_FILENAME_CATEGORIES, retType);
         }
         if (ret != null) {
@@ -58,7 +61,7 @@ public class API {
         Type retType = new TypeToken<CheatSheet>() {
         }.getType();
         CheatSheet ret = null;
-        if (!BuildConfig.DEBUG) {
+        if (Constants.USE_CACHE) {
             ret = Utils.readCache(Constants.CACHE_FILENAME_CHEATSHEET + cheatSheetId, retType);
         }
         if (ret != null) {
@@ -69,10 +72,33 @@ public class API {
             @Override
             public void success(CheatSheet data) {
                 Utils.writeCache(data, Constants.CACHE_FILENAME_CHEATSHEET + cheatSheetId);
+                if (sCachedIds != null && !sCachedIds.contains(cheatSheetId))
+                    sCachedIds.add(cheatSheetId);
             }
         });
         Call<CheatSheet> call = sService.getCheatSheet(cheatSheetId);
         call.enqueue(callback);
+    }
+
+    private static List<Integer> sCachedIds = null;
+
+    public static List<Integer> getCachedIds() {
+        if (sCachedIds != null) return sCachedIds;
+
+        sCachedIds = new ArrayList<>();
+        File cacheDir = CheatSheetsApp.getAppContext().getCacheDir();
+        for (File f : cacheDir.listFiles()) {
+            if (f.isFile()) {
+                String name = f.getName();
+                if (!name.startsWith(Constants.CACHE_FILENAME_CHEATSHEET)) continue;
+                Matcher matcher = Constants.CHEATSHEET_ID_REGEX.matcher(name);
+                while (matcher.find()) {
+                    sCachedIds.add(Integer.parseInt(matcher.group(1)));
+                }
+            }
+        }
+
+        return sCachedIds;
     }
 
     public static Category addRecentlyOpened(List<Category> categories) {

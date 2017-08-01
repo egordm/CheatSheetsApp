@@ -10,6 +10,7 @@ import android.widget.TextView;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.api.API;
 import net.egordmitriev.cheatsheets.pojo.Category;
+import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
 import net.egordmitriev.cheatsheets.widgets.CategoryGroupHolder;
 import net.egordmitriev.cheatsheets.widgets.CustomLoaderView;
@@ -60,6 +61,7 @@ public class MainActivity extends SearchBarActivity
         mCategories = data;
         mHolders = new ArrayList<>();
         mCategoryContainer.removeAllViews();
+
         addRecents(data);
         for (Category category : mCategories) {
            addCategory(category);
@@ -80,6 +82,13 @@ public class MainActivity extends SearchBarActivity
         if(mHolders != null && !mHolders.isEmpty()) {
             for(CategoryGroupHolder holder : mHolders) {
                 if(holder.getCategory().temp) mCategoryContainer.removeView(holder.getView());
+            }
+        }
+
+        List<Integer> locals = API.getCachedIds();
+        for(Category category : data) {
+            for(CheatSheet cheatSheet : category.cheat_sheets) {
+                if (locals.contains(cheatSheet.id)) cheatSheet.isLocal = true;
             }
         }
 

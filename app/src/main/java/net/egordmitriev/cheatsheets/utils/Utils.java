@@ -49,7 +49,7 @@ public class Utils { //Test
     }
 
     public static <T> T readCache(String filename, Type type) {
-        File file = new File(CheatSheetsApp.getAppContext().getCacheDir(), filename+".json");
+        File file = new File(CheatSheetsApp.getAppContext().getFilesDir(), filename+".json"); //TODO: change cache to data
         if (file.exists()) {
             Type retType = TypeToken.getParameterized(CacheData.class, type).getType();
             CacheData<T> data = sGson.fromJson(Utils.readFile(file), retType);
@@ -68,7 +68,7 @@ public class Utils { //Test
         CacheData<T> cacheData = new CacheData<>(expires, data);
         boolean success;
 
-        File file = new File(CheatSheetsApp.getAppContext().getCacheDir(), filename+".json");
+        File file = new File(CheatSheetsApp.getAppContext().getFilesDir(), filename+".json");
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
             OutputStreamWriter outputWriter = new OutputStreamWriter(outputStream);

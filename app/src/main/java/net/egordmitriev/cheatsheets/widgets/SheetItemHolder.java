@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.egordmitriev.cheatsheets.R;
@@ -26,6 +27,9 @@ public class SheetItemHolder extends ViewHolder<CheatSheet>{
     @BindView(R.id.title)
     TextView mTitleView;
 
+    @BindView(R.id.local_status)
+    ImageView mLocalStatusView;
+
     public SheetItemHolder(Activity activity, View view) {
         super(view);
         mActivity = activity;
@@ -35,6 +39,7 @@ public class SheetItemHolder extends ViewHolder<CheatSheet>{
     public void onBind(CheatSheet data, int position) {
         onBind(data);
         mTitleView.setText(data.title);
+        mLocalStatusView.setImageResource(data.isLocal ? R.drawable.ic_local : R.drawable.ic_cloud);
         mView.setBackgroundResource((position % 2 == 0) ? R.color.tableEven : R.color.tableUneven);
     }
 
