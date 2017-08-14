@@ -23,28 +23,26 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support:design:26.+'
-
     compile 'com.android.support:cardview-v7:26.+'
     compile 'com.android.support:recyclerview-v7:26.+'
     compile 'com.balysv.materialmenu:material-menu:2.0.0'
     compile 'net.cachapa.expandablelayout:expandablelayout:2.9.1'
     compile 'net.egordmitriev.loaderview:loaderview:1.3'
-
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-
-//    compile 'com.github.barteksc:android-pdf-viewer:2.7.0-beta.1'
-
+    //    compile 'com.github.barteksc:android-pdf-viewer:2.7.0-beta.1'
     compile 'com.orhanobut:logger:2.1.1'
     compile 'com.jakewharton:butterknife:8.6.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 
+    compile(name:'libmupdf-1.1', ext:'aar')
+
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     testCompile 'junit:junit:4.12'
 }
