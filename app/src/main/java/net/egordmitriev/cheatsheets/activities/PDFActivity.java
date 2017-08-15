@@ -4,7 +4,14 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Menu;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.artifex.mupdf.fitz.Document;
@@ -25,10 +32,15 @@ public class PDFActivity extends SearchBarActivity {
 	
 	private PDFView mDocView;
 	private Document mDoc;
+	private ImageButton mNextButton;
+	private ImageButton mPreviousButton;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		initSearchView();
 		
 		Uri pdf = openPDF();
 		final String path = Uri.decode(pdf.getEncodedPath());
@@ -41,7 +53,50 @@ public class PDFActivity extends SearchBarActivity {
 		mDocView.setDocument(mDoc);
 		
 		mDocView.setSearchScrollPos(0.35f);
+	}
+	
+	private void initSearchView() {
+		LinearLayout.LayoutParams searchButtonParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
 		
+		TypedValue typedValue = new TypedValue();
+		getTheme().resolveAttribute(R.attr.selectableItemBackgroundBorderless, typedValue, true);
+		int padding_side = (int) getResources().getDimension(R.dimen.spacing_quarter);
+		
+		mPreviousButton = new ImageButton(this);
+		mNextButton = new ImageButton(this);
+		mPreviousButton.setBackgroundResource(typedValue.resourceId);
+		mNextButton.setBackgroundResource(typedValue.resourceId);
+		mPreviousButton.setImageResource(R.drawable.ic_previous);
+		mNextButton.setImageResource(R.drawable.ic_next);
+		mPreviousButton.setPadding(padding_side, 0, padding_side, 0);
+		mNextButton.setPadding(padding_side, 0, padding_side, 0);
+		
+		((LinearLayout) mSearchView.findViewById(R.id.search_plate)).addView(mPreviousButton, searchButtonParams);
+		((LinearLayout) mSearchView.findViewById(R.id.search_plate)).addView(mNextButton, searchButtonParams);
+		
+		mPreviousButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				mDocView.onSearchNext(mSearchView.getQuery().toString());
+			}
+		});
+		mNextButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				mDocView.onSearchPrevious(mSearchView.getQuery().toString());
+			}
+		});
+		
+		mPreviousButton.setVisibility(View.GONE);
+		mNextButton.setVisibility(View.GONE);
+	}
+	
+	@Override
+	public boolean onQueryTextChange(String newText) {
+		int visibility = TextUtils.isEmpty(newText) ? View.GONE : View.VISIBLE;
+		mPreviousButton.setVisibility(visibility);
+		mNextButton.setVisibility(visibility);
+		return super.onQueryTextChange(newText);
 	}
 	
 	@Override
@@ -53,6 +108,12 @@ public class PDFActivity extends SearchBarActivity {
 	@Override
 	protected int getLayout() {
 		return R.layout.activity_pdf;
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		//getMenuInflater().inflate(R.menu.main_directional, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 	
 	private void copyFile(InputStream in, OutputStream out) throws IOException {
