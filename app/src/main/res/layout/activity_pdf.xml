@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"><!--tools:openDrawer="start"-->
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="net.egordmitriev.cheatsheets.activities.MainActivity">
+
+        <RelativeLayout
+            android:id="@+id/doc_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?actionBarSize">
+
+            <net.egordmitriev.libmupdf.PDFView
+                android:id="@+id/doc_view_inner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </net.egordmitriev.libmupdf.PDFView>
+
+        </RelativeLayout>
+
+        <net.egordmitriev.cheatsheets.widgets.CustomLoaderView
+            android:id="@+id/loaderview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?actionBarSize"
+            app:loading_resourceID="@layout/component_loading"
+            app:state="loading"
+            android:visibility="gone"/>
+
+        <include layout="@layout/app_bar"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/activity_main_drawer"/>
+
+</android.support.v4.widget.DrawerLayout>
