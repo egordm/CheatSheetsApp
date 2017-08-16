@@ -1,11 +1,14 @@
 package net.egordmitriev.cheatsheets.api;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.database.sqlite.SQLiteStatement;
 import android.text.TextUtils;
+
+import com.orhanobut.logger.Logger;
 
 import net.egordmitriev.cheatsheets.api.RegistryContract.CategoryEntry;
 import net.egordmitriev.cheatsheets.api.RegistryContract.CheatSheetEntry;
@@ -30,15 +33,31 @@ public class Registry {
 		mDatabase = mDbHelper.getWritableDatabase();
 	}
 	
+	public void close() {
+		mDatabase.close();
+	}
+	
 	private static final String[] categoryProjection = {
 			CheatSheetEntry.FULL_ID, CheatSheetEntry.fullColumn(CheatSheetEntry.COLUMN_NAME_TITLE), CheatSheetEntry.fullColumn(CheatSheetEntry.COLUMN_NAME_SUBTITLE),
 			CheatSheetEntry.fullColumn(CheatSheetEntry.COLUMN_NAME_DESCRIPTION), CheatSheetEntry.COLUMN_NAME_TAGS, CheatSheetEntry.COLUMN_NAME_LOCAL,
 			CategoryEntry.FULL_ID, CategoryEntry.fullColumn(CategoryEntry.COLUMN_NAME_TITLE), CategoryEntry.fullColumn(CategoryEntry.COLUMN_NAME_DESCRIPTION)
 	};
 	
+	public void updateLocal(int id, boolean local) {
+		ContentValues values = new ContentValues();
+		values.put(CheatSheetEntry.COLUMN_NAME_LOCAL, local);
+		if(local)
+			values.put(CheatSheetEntry.COLUMN_NAME_LAST_USED, System.currentTimeMillis());
+		
+		String selection = CheatSheetEntry._ID + " = ?";
+		String[] selectionArgs = {String.valueOf(id)};
+		mDatabase.update(CheatSheetEntry.TABLE_NAME, values, selection, selectionArgs);
+	}
+	
 	public boolean tryPutCategories(List<Category> categories) {
 		mDatabase.beginTransaction();
 		try {
+			mDatabase.delete(CategoryEntry.TABLE_NAME, null, null);
 			for (Category category : categories) {
 				putCategory(category);
 			}
@@ -64,7 +83,6 @@ public class Registry {
 		}
 	}
 	
-	
 	public void putCheatSheet(CheatSheet cheatSheet, int categoryId) {
 		SQLiteStatement catInsert = mDatabase.compileStatement(RegistryContract.SQL_UPSERT_CHEAT_SHEET);
 		catInsert.bindLong(1, cheatSheet.id);
@@ -87,7 +105,7 @@ public class Registry {
 		List<Category> ret = new ArrayList<>();
 		Category current = null;
 		while (cursor.moveToNext()) {
-			if (current == null || current.id != cursor.getInt(5)) {
+			if (current == null || current.id != cursor.getInt(6)) {
 				current = new Category(cursor.getInt(6), cursor.getString(7), cursor.getString(8), new ArrayList<CheatSheet>());
 				ret.add(current);
 			}
@@ -96,6 +114,30 @@ public class Registry {
 			cs.isLocal = cursor.getInt(5) > 0;
 			current.cheat_sheets.add(cs);
 		}
+		cursor.close();
+		return ret;
+	}
+	
+	public List<Integer> getCheatSheetsCached() {
+		Cursor cursor = mDatabase.query(CheatSheetEntry.TABLE_NAME, new String[]{CheatSheetEntry._ID},
+				CheatSheetEntry.COLUMN_NAME_LOCAL  + " > 0", null, null, null, null);
+		List<Integer> ret = new ArrayList<>();
+		while (cursor.moveToNext()) {
+			ret.add(cursor.getInt(0));
+		}
+		cursor.close();
+		return ret;
+	}
+	
+	public List<Integer> getCheatSheetsRecent(int count) {
+		Cursor cursor = mDatabase.query(CheatSheetEntry.TABLE_NAME, new String[]{CheatSheetEntry._ID},
+				CheatSheetEntry.COLUMN_NAME_LAST_USED  + " > 0", null, null, null,
+				CheatSheetEntry.COLUMN_NAME_LAST_USED + " DESC", String.valueOf(count));
+		List<Integer> ret = new ArrayList<>();
+		while (cursor.moveToNext()) {
+			ret.add(cursor.getInt(0));
+		}
+		cursor.close();
 		return ret;
 	}
 	
