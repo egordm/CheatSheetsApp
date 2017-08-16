@@ -18,30 +18,15 @@ public class RegistryDbHelper extends SQLiteOpenHelper {
 	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.beginTransaction();
-		try {
-			db.execSQL(RegistryContract.SQL_CREATE_CATEGORIES);
-			db.execSQL(RegistryContract.SQL_CREATE_CHEAT_SHEETS);
-			db.setTransactionSuccessful();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			db.endTransaction();
-		}
+		db.execSQL(RegistryContract.SQL_CREATE_CATEGORIES);
+		db.execSQL(RegistryContract.SQL_CREATE_CHEAT_SHEETS);
 	}
 	
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.beginTransaction();
-		try {
-			db.execSQL(deleteQuery(RegistryContract.CheatSheetEntry.TABLE_NAME));
-			db.execSQL(deleteQuery(RegistryContract.CategoryEntry.TABLE_NAME));
-			onCreate(db);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			db.endTransaction();
-		}
+		db.execSQL(deleteQuery(RegistryContract.CheatSheetEntry.TABLE_NAME));
+		db.execSQL(deleteQuery(RegistryContract.CategoryEntry.TABLE_NAME));
+		onCreate(db);
 	}
 	
 	@Override
