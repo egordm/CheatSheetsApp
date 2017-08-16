@@ -37,6 +37,7 @@ public class RegistryContract {
 		public static final String COLUMN_NAME_DESCRIPTION = "description";
 		public static final String COLUMN_NAME_TAGS = "tags";
 		public static final String COLUMN_NAME_LOCAL = "local";
+		public static final String COLUMN_NAME_LAST_USED = "last_used";
 		
 		public static final String[] PROJECTION = {
 				_ID,
@@ -67,6 +68,7 @@ public class RegistryContract {
 			CheatSheetEntry.COLUMN_NAME_DESCRIPTION + " TEXT," +
 			CheatSheetEntry.COLUMN_NAME_TAGS + " TEXT," +
 			CheatSheetEntry.COLUMN_NAME_LOCAL + " BOOLEAN DEFAULT 0," +
+			CheatSheetEntry.COLUMN_NAME_LAST_USED + " INTEGER," +
 			CheatSheetEntry.COLUMN_NAME_CATEGORY_ID + " INTEGER REFERENCES " + CheatSheetEntry.TABLE_NAME
 			+ "(" + CategoryEntry._ID + ") ON DELETE CASCADE)";
 	

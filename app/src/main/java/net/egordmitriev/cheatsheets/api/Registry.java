@@ -8,8 +8,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.database.sqlite.SQLiteStatement;
 import android.text.TextUtils;
 
-import com.orhanobut.logger.Logger;
-
 import net.egordmitriev.cheatsheets.api.RegistryContract.CategoryEntry;
 import net.egordmitriev.cheatsheets.api.RegistryContract.CheatSheetEntry;
 import net.egordmitriev.cheatsheets.pojo.Category;
