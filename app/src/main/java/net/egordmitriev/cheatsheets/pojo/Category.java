@@ -1,5 +1,7 @@
 package net.egordmitriev.cheatsheets.pojo;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +61,26 @@ public class Category extends MatchableModel {
 			if (temp != null) return temp;
 		}
 		return null;
+	}
+	
+	public Category cloneMe() {
+		Category ret = new Category(id, title, description, (List<CheatSheet>) ((ArrayList<CheatSheet>)cheat_sheets).clone());
+		ret.temp = temp;
+		return ret;
+	}
+	
+	public Category applyQuery(String query) {
+		if(TextUtils.isEmpty(query) || matchesString(query, false)) {
+			return this;
+		}
+		List<CheatSheet> results = new ArrayList<>();
+		for (CheatSheet cheatSheet : cheat_sheets) {
+			if(cheatSheet.applyQuery(query)) results.add(cheatSheet);
+		}
+		if(results.isEmpty()) return null;
+		Category ret = cloneMe();
+		ret.cheat_sheets = results;
+		return ret;
 	}
 	
 }

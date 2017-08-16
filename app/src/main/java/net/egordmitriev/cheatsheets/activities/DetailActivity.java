@@ -85,7 +85,6 @@ public class DetailActivity extends SearchBarActivity {
             CheatGroup temp = cheatGroup.applyQuery(query);
             if (temp != null) data.add(temp);
         }
-
         mAdapter.replaceAll(data);
         return true;
     }

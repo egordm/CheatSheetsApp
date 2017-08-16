@@ -42,4 +42,8 @@ public class CheatSheet extends MatchableModel {
             addAll(tags);
         }};
     }
+    
+    public boolean applyQuery(String query) {
+        return matchesString(query, false);
+    }
 }

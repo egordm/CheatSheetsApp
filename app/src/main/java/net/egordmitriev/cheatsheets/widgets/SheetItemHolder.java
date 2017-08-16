@@ -61,21 +61,4 @@ public class SheetItemHolder extends ViewHolder<CheatSheet>{
         parent.addView(view);
         return view;
     }
-
-
-    public boolean applyQuery(String query) {
-        if (mData.matchesString(query, false)) {
-            forceVisibility(true);
-            return true;
-        }
-        forceVisibility(false);
-        return false;
-    }
-
-
-    public void forceVisibility(boolean visible) {
-        getView().setVisibility(visible ? View.VISIBLE : View.GONE);
-    }
-
-
 }

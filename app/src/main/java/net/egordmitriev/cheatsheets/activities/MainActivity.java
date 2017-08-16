@@ -2,14 +2,14 @@ package net.egordmitriev.cheatsheets.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
-
 import net.egordmitriev.cheatsheets.R;
+import net.egordmitriev.cheatsheets.adapters.CategoryAdapter;
 import net.egordmitriev.cheatsheets.api.API;
 import net.egordmitriev.cheatsheets.pojo.Category;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
@@ -26,12 +26,14 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends SearchBarActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    
     @BindView(R.id.dataContainer)
-    LinearLayout mCategoryContainer;
+    RecyclerView mCategoryContainer;
 
     @BindView(R.id.loaderview)
     CustomLoaderView mLoaderView;
+    
+    private CategoryAdapter mAdapter;
 
     private List<Category> mCategories;
     private List<CategoryGroupHolder> mHolders;
@@ -41,6 +43,11 @@ public class MainActivity extends SearchBarActivity
         super.onCreate(savedInstanceState);
         mLoaderView.setState(LoaderView.STATE_LOADING);
         mSearchView.setQueryHint("Search for cheatsheets");
+    
+        mCategoryContainer.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new CategoryAdapter(this);
+        mCategoryContainer.setAdapter(mAdapter);
+        
         API.requestCategories(getCallback());
     }
 
@@ -52,46 +59,29 @@ public class MainActivity extends SearchBarActivity
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        if (mCategories == null) return false;
-        for(CategoryGroupHolder holder : mHolders) {
-            holder.applyQuery(query);
+        if(mCategories == null) return false;
+        List<Category> data = new ArrayList<>();
+        for (Category category : mCategories) {
+            Category temp = category.applyQuery(query);
+            if (temp != null) data.add(temp);
         }
+        mAdapter.replaceAll(data);
         return true;
     }
 
     private void setupWithData(List<Category> data) {
         mCategories = data;
-        mHolders = new ArrayList<>();
-        mCategoryContainer.removeAllViews();
-
-        addRecents(data);
-        for (Category category : mCategories) {
-           addCategory(category);
-        }
         mLoaderView.setState(LoaderView.STATE_IDLE);
+        mAdapter.add(data);
     }
-
-    public void addCategory(Category category) {
-        View view = CategoryGroupHolder.inflate(getLayoutInflater(), mCategoryContainer, true);
-        CategoryGroupHolder holder = new CategoryGroupHolder(this, view);
-        holder.onBind(category);
-        mHolders.add(holder);
-        holder.collapse(false, true);
-    }
-
+    
     public void addRecents(List<Category> data) {
         if(data == null || data.isEmpty()) return;
-        if(mHolders != null && !mHolders.isEmpty()) {
-            for(CategoryGroupHolder holder : mHolders) {
-                if(holder.getCategory().temp) mCategoryContainer.removeView(holder.getView());
-            }
-        }
 
         List<Integer> locals = API.getCachedIds();
         for(Category category : data) {
             for(CheatSheet cheatSheet : category.cheat_sheets) {
                 if (locals.contains(cheatSheet.id)) {
-                    Logger.d(cheatSheet.title + " and " + cheatSheet.id);
                     cheatSheet.isLocal = true;
                 }
             }
@@ -100,15 +90,8 @@ public class MainActivity extends SearchBarActivity
         Category recents = API.addRecentlyOpened(data);
         if(recents == null) return;
 
-        View view = CategoryGroupHolder.inflate(getLayoutInflater(), mCategoryContainer, false);
-        mCategoryContainer.addView(view, 0);
-        CategoryGroupHolder holder = new CategoryGroupHolder(this, view);
-        holder.onBind(recents);
-        mHolders.add(0, holder);
-        holder.collapse(false, true);
-
+        
     }
-
     private DataCallback<ArrayList<Category>> getCallback() {
         return new DataCallback<ArrayList<Category>>() {
             @Override
