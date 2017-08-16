@@ -4,19 +4,26 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
-import android.database.sqlite.SQLiteStatement;
 import android.text.TextUtils;
+import android.util.SparseArray;
 
+import com.google.gson.reflect.TypeToken;
+
+import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.api.RegistryContract.CategoryEntry;
 import net.egordmitriev.cheatsheets.api.RegistryContract.CheatSheetEntry;
 import net.egordmitriev.cheatsheets.pojo.Category;
 import net.egordmitriev.cheatsheets.pojo.CheatGroup;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
+import net.egordmitriev.cheatsheets.utils.Utils;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+
+import static net.egordmitriev.cheatsheets.utils.Constants.CACHE_LIFETIME;
 
 /**
  * Created by egordm on 15-8-2017.
@@ -33,23 +40,6 @@ public class Registry {
 	
 	public void close() {
 		mDatabase.close();
-	}
-	
-	private static final String[] categoryProjection = {
-			CheatSheetEntry.FULL_ID, CheatSheetEntry.fullColumn(CheatSheetEntry.COLUMN_NAME_TITLE), CheatSheetEntry.fullColumn(CheatSheetEntry.COLUMN_NAME_SUBTITLE),
-			CheatSheetEntry.fullColumn(CheatSheetEntry.COLUMN_NAME_DESCRIPTION), CheatSheetEntry.COLUMN_NAME_TAGS, CheatSheetEntry.COLUMN_NAME_LOCAL,
-			CategoryEntry.FULL_ID, CategoryEntry.fullColumn(CategoryEntry.COLUMN_NAME_TITLE), CategoryEntry.fullColumn(CategoryEntry.COLUMN_NAME_DESCRIPTION)
-	};
-	
-	public void updateLocal(int id, boolean local) {
-		ContentValues values = new ContentValues();
-		values.put(CheatSheetEntry.COLUMN_NAME_LOCAL, local);
-		if(local)
-			values.put(CheatSheetEntry.COLUMN_NAME_LAST_USED, System.currentTimeMillis());
-		
-		String selection = CheatSheetEntry._ID + " = ?";
-		String[] selectionArgs = {String.valueOf(id)};
-		mDatabase.update(CheatSheetEntry.TABLE_NAME, values, selection, selectionArgs);
 	}
 	
 	public boolean tryPutCategories(List<Category> categories) {
@@ -69,56 +59,79 @@ public class Registry {
 		return true;
 	}
 	
-	public void putCategory(Category category) {
-		SQLiteStatement catInsert = mDatabase.compileStatement(RegistryContract.SQL_UPSERT_CATEGORY);
-		catInsert.bindLong(1, category.id);
-		bindString(catInsert, 2, category.title);
-		bindString(catInsert, 3, category.description);
-		catInsert.execute();
+	public long putCategory(Category category) {
+		ContentValues vals = new ContentValues();
+		vals.put(CategoryEntry._ID, category.id);
+		vals.put(CategoryEntry.TITLE, category.title);
+		vals.put(CategoryEntry.DESCRIPTION, category.description);
+		long ret = mDatabase.insertWithOnConflict(CategoryEntry.TABLE_NAME, null, vals, SQLiteDatabase.CONFLICT_REPLACE);
 		
 		for (CheatSheet cheatSheet : category.cheat_sheets) {
 			putCheatSheet(cheatSheet, category.id);
 		}
+		return ret;
 	}
 	
-	public void putCheatSheet(CheatSheet cheatSheet, int categoryId) {
-		SQLiteStatement catInsert = mDatabase.compileStatement(RegistryContract.SQL_UPSERT_CHEAT_SHEET);
-		catInsert.bindLong(1, cheatSheet.id);
-		catInsert.bindLong(2, categoryId);
-		bindString(catInsert, 3, cheatSheet.title);
-		bindString(catInsert, 4, cheatSheet.subtitle);
-		bindString(catInsert, 5, cheatSheet.description);
-		bindString(catInsert, 6, TextUtils.join(",", cheatSheet.tags));
-		catInsert.execute();
+	public long putCheatSheet(CheatSheet cheatSheet, int categoryId) {
+		ContentValues vals = new ContentValues();
+		vals.put(CheatSheetEntry.CATEGORY_ID, categoryId);
+		vals.put(CheatSheetEntry._ID, cheatSheet.id);
+		vals.put(CheatSheetEntry.TYPE, cheatSheet.type);
+		vals.put(CheatSheetEntry.TITLE, cheatSheet.title);
+		vals.put(CheatSheetEntry.SUBTITLE, cheatSheet.subtitle);
+		vals.put(CheatSheetEntry.DESCRIPTION, cheatSheet.description);
+		vals.put(CheatSheetEntry.TAGS, TextUtils.join(",", cheatSheet.tags));
+		return mDatabase.insertWithOnConflict(CheatSheetEntry.TABLE_NAME, null, vals, SQLiteDatabase.CONFLICT_REPLACE);
+	}
+	
+	public void updateCheatSheetContent(int id, String content) {
+		ContentValues vals = new ContentValues();
+		vals.put(CheatSheetEntry.CONTENT, content);
+		vals.put(CheatSheetEntry.LAST_SYNC, System.currentTimeMillis());
+		
+		String selection = CheatSheetEntry._ID + " = ?";
+		String[] selectionArgs = {String.valueOf(id)};
+		
+		mDatabase.update(CheatSheetEntry.TABLE_NAME, vals, selection, selectionArgs);
+	}
+	
+	public void updateCheatSheetsUsed(int id) {
+		ContentValues values = new ContentValues();
+		values.put(CheatSheetEntry.LAST_USED, System.currentTimeMillis());
+		String selection = CheatSheetEntry._ID + " = ?";
+		String[] selectionArgs = {String.valueOf(id)};
+		
+		mDatabase.update(CheatSheetEntry.TABLE_NAME, values, selection, selectionArgs);
 	}
 	
 	public List<Category> getCategories() {
-		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-		builder.setTables(CheatSheetEntry.TABLE_NAME + " LEFT OUTER JOIN " + CategoryEntry.TABLE_NAME + " ON " +
-				CheatSheetEntry.COLUMN_NAME_CATEGORY_ID + " = " + CategoryEntry.FULL_ID);
-		String orderBy = CategoryEntry.FULL_ID + " ASC";
-		
-		Cursor cursor = builder.query(mDatabase, categoryProjection, null, null, null, null, orderBy);
-		
-		List<Category> ret = new ArrayList<>();
-		Category current = null;
+		SparseArray<Category> ret = new SparseArray<>();
+		Cursor cursor = mDatabase.query(CategoryEntry.TABLE_NAME, CategoryEntry.PROJECTION,
+				null, null, null, null, CategoryEntry._ID + " ASC");
+		Category cat;
 		while (cursor.moveToNext()) {
-			if (current == null || current.id != cursor.getInt(6)) {
-				current = new Category(cursor.getInt(6), cursor.getString(7), cursor.getString(8), new ArrayList<CheatSheet>());
-				ret.add(current);
-			}
-			CheatSheet cs = new CheatSheet(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3),
-					new ArrayList<CheatGroup>(), Arrays.asList(cursor.getString(4).split(",")));
-			cs.isLocal = cursor.getInt(5) > 0;
-			current.cheat_sheets.add(cs);
+			cat = new Category(cursor.getInt(0), cursor.getString(1), cursor.getString(2), new ArrayList<CheatSheet>());
+			ret.append(cat.id, cat);
 		}
 		cursor.close();
-		return ret;
+		
+		cursor = mDatabase.query(CheatSheetEntry.TABLE_NAME, CheatSheetEntry.PROJECTION,
+				null, null, null, null, CheatSheetEntry.CATEGORY_ID + " ASC");
+		while (cursor.moveToNext()) {
+			cat = ret.get(cursor.getInt(0));
+			if (cat == null) continue;
+			cat.cheat_sheets.add(
+					new CheatSheet(cursor.getInt(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4),
+							cursor.getString(5), null, Arrays.asList(cursor.getString(6).split(",")), new Date(cursor.getLong(1)))
+			);
+		}
+		cursor.close();
+		return Utils.ConvertToList(ret);
 	}
 	
 	public List<Integer> getCheatSheetsCached() {
 		Cursor cursor = mDatabase.query(CheatSheetEntry.TABLE_NAME, new String[]{CheatSheetEntry._ID},
-				CheatSheetEntry.COLUMN_NAME_LOCAL  + " > 0", null, null, null, null);
+				RegistryContract.SQL_WHERE_CACHED, null, null, null, null);
 		List<Integer> ret = new ArrayList<>();
 		while (cursor.moveToNext()) {
 			ret.add(cursor.getInt(0));
@@ -129,8 +142,8 @@ public class Registry {
 	
 	public List<Integer> getCheatSheetsRecent(int count) {
 		Cursor cursor = mDatabase.query(CheatSheetEntry.TABLE_NAME, new String[]{CheatSheetEntry._ID},
-				CheatSheetEntry.COLUMN_NAME_LAST_USED  + " > 0", null, null, null,
-				CheatSheetEntry.COLUMN_NAME_LAST_USED + " DESC", String.valueOf(count));
+				CheatSheetEntry.LAST_USED + " > 0", null, null, null,
+				CheatSheetEntry.LAST_USED + " DESC", String.valueOf(count));
 		List<Integer> ret = new ArrayList<>();
 		while (cursor.moveToNext()) {
 			ret.add(cursor.getInt(0));
@@ -139,11 +152,27 @@ public class Registry {
 		return ret;
 	}
 	
-	private void bindString(SQLiteStatement stmt, int index, String s) {
-		if (s == null) {
-			stmt.bindNull(index);
-		} else {
-			stmt.bindString(index, s);
+	private static final Type contentType = new TypeToken<List<CheatGroup>>() {}.getType();
+	
+	public CheatSheet getCheatSheetContent(int id) {
+		String selection = CheatSheetEntry._ID + "=" + id;
+		if(CheatSheetsApp.isNetworkAvailable()) {
+			selection += " and "+CheatSheetEntry.LAST_SYNC + ">" + (System.currentTimeMillis() - CACHE_LIFETIME);
 		}
+		Cursor cursor = mDatabase.query(CheatSheetEntry.TABLE_NAME, CheatSheetEntry.PROJECTION_CONTENT,
+				selection, null, null, null, null, "1");
+		try {
+			if (cursor.getCount() == 0) return null;
+			cursor.moveToNext();
+			List<CheatGroup> cheat_groups =  API.sGson.fromJson(cursor.getString(6), contentType);
+			return new CheatSheet(cursor.getInt(0), cursor.getInt(1), cursor.getString(2),
+					cursor.getString(3), cursor.getString(4), cheat_groups, Arrays.asList(cursor.getString(5).split(",")),
+					new Date(cursor.getLong(7)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cursor.close();
+		}
+		return null;
 	}
 }

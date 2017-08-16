@@ -8,13 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.adapters.CheatsheetAdapter;
 import net.egordmitriev.cheatsheets.api.API;
 import net.egordmitriev.cheatsheets.pojo.CheatGroup;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
-import net.egordmitriev.cheatsheets.utils.PreferenceManager;
 import net.egordmitriev.cheatsheets.widgets.CustomLoaderView;
 import net.egordmitriev.loaderview.LoaderView;
 
@@ -54,7 +54,7 @@ public class DetailActivity extends SearchBarActivity {
             finish();
             return;
         }
-        PreferenceManager.getInstance().putRecentlyOpened(id);
+        CheatSheetsApp.getRegistry().updateCheatSheetsUsed(id);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

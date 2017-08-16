@@ -34,7 +34,7 @@ public class PDFActivity extends SearchBarActivity {
 	private Document mDoc;
 	private ImageButton mNextButton;
 	private ImageButton mPreviousButton;
-	
+	//private Registry mRegistry;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,23 @@ public class PDFActivity extends SearchBarActivity {
 		mDocView.setDocument(mDoc);
 		
 		mDocView.setSearchScrollPos(0.35f);
+		
+/*		mRegistry = new Registry(this);
+		
+		API.requestCategories(new DataCallback<ArrayList<Category>>() {
+			@Override
+			public void onData(ArrayList<Category> data) {
+				mRegistry.tryPutCategories(data);
+				Logger.d("Saved categories");
+				List<Category> cats = mRegistry.getCategories();
+				Logger.d(API.sGson.toJson(cats));
+			}
+			
+			@Override
+			public void onError(Throwable t) {
+				Logger.e(String.valueOf(t));
+			}
+		});*/
 	}
 	
 	private void initSearchView() {

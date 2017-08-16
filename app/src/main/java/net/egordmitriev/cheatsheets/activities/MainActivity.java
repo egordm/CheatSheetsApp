@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.api.API;
 import net.egordmitriev.cheatsheets.pojo.Category;
@@ -88,7 +90,10 @@ public class MainActivity extends SearchBarActivity
         List<Integer> locals = API.getCachedIds();
         for(Category category : data) {
             for(CheatSheet cheatSheet : category.cheat_sheets) {
-                if (locals.contains(cheatSheet.id)) cheatSheet.isLocal = true;
+                if (locals.contains(cheatSheet.id)) {
+                    Logger.d(cheatSheet.title + " and " + cheatSheet.id);
+                    cheatSheet.isLocal = true;
+                }
             }
         }
 
