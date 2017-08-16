@@ -10,3 +10,4 @@
 .externalNativeBuild
 app/libs/*
 app/src/main/assets/git-cs.pdf
+*.db
