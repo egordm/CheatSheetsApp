@@ -18,7 +18,6 @@ import net.egordmitriev.cheatsheets.widgets.presenters.CategoryGroupPresenter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,8 +92,6 @@ public class CategoryGroupHolder extends RecyclerViewHolder<CategoryGroupPresent
 		return view;
 	}
 	
-	private List<SheetItemHolder> mHolders = new ArrayList<>();
-	
 	public class CategoryChildAdapter extends AdvancedRecyclerAdapter<CheatSheet, SheetItemHolder> {
 		@Override
 		public SheetItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -105,6 +102,7 @@ public class CategoryGroupHolder extends RecyclerViewHolder<CategoryGroupPresent
 		@Override
 		public void onBindViewHolder(SheetItemHolder holder, int position) {
 			holder.onBind(mData.get(position));
+			holder.getView().setBackgroundResource((position % 2 == 0) ? R.color.tableEven : R.color.tableUneven);
 		}
 	}
 }
