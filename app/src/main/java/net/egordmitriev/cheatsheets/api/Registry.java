@@ -15,11 +15,9 @@ import net.egordmitriev.cheatsheets.api.RegistryContract.CheatSheetEntry;
 import net.egordmitriev.cheatsheets.pojo.Category;
 import net.egordmitriev.cheatsheets.pojo.CheatGroup;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
-import net.egordmitriev.cheatsheets.utils.Utils;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +40,7 @@ public class Registry {
 		mDatabase.close();
 	}
 	
-	public boolean tryPutCategories(List<Category> categories) {
+	public boolean tryPutCategories(Category[] categories) {
 		mDatabase.beginTransaction();
 		try {
 			mDatabase.delete(CategoryEntry.TABLE_NAME, null, null);
@@ -104,29 +102,38 @@ public class Registry {
 		mDatabase.update(CheatSheetEntry.TABLE_NAME, values, selection, selectionArgs);
 	}
 	
-	public List<Category> getCategories() {
-		SparseArray<Category> ret = new SparseArray<>();
-		Cursor cursor = mDatabase.query(CategoryEntry.TABLE_NAME, CategoryEntry.PROJECTION,
-				null, null, null, null, CategoryEntry._ID + " ASC");
-		Category cat;
-		while (cursor.moveToNext()) {
-			cat = new Category(cursor.getInt(0), cursor.getString(1), cursor.getString(2), new ArrayList<CheatSheet>());
-			ret.append(cat.id, cat);
-		}
-		cursor.close();
+	public Category[] getCategories() {
+		int categoryID;
 		
-		cursor = mDatabase.query(CheatSheetEntry.TABLE_NAME, CheatSheetEntry.PROJECTION,
+		SparseArray<List<CheatSheet>> cheatSheets = new SparseArray<>();
+		Cursor cursor = mDatabase.query(CheatSheetEntry.TABLE_NAME, CheatSheetEntry.PROJECTION,
 				null, null, null, null, CheatSheetEntry.CATEGORY_ID + " ASC");
 		while (cursor.moveToNext()) {
-			cat = ret.get(cursor.getInt(0));
-			if (cat == null) continue;
-			cat.cheat_sheets.add(
+			categoryID = cursor.getInt(0);
+			if (cheatSheets.get(categoryID) == null)
+				cheatSheets.append(categoryID, new ArrayList<CheatSheet>());
+			cheatSheets.get(categoryID).add(
 					new CheatSheet(cursor.getInt(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4),
-							cursor.getString(5), null, Arrays.asList(cursor.getString(6).split(",")), new Date(cursor.getLong(1)))
+							cursor.getString(5), null, cursor.getString(6).split(","), new Date(cursor.getLong(1)))
 			);
 		}
 		cursor.close();
-		return Utils.ConvertToList(ret);
+		
+		
+		cursor = mDatabase.query(CategoryEntry.TABLE_NAME, CategoryEntry.PROJECTION,
+				null, null, null, null, CategoryEntry._ID + " ASC");
+		Category[] ret = new Category[cursor.getCount()];
+		int index = 0;
+		while (cursor.moveToNext()) {
+			categoryID = cursor.getInt(0);
+			List<CheatSheet> cs = cheatSheets.get(categoryID);
+			ret[index] = new Category(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
+					(cs != null) ? cs.toArray(new CheatSheet[cs.size()]) : null);
+			index++;
+		}
+		cursor.close();
+		
+		return ret;
 	}
 	
 	public List<Integer> getCheatSheetsCached() {
@@ -152,21 +159,22 @@ public class Registry {
 		return ret;
 	}
 	
-	private static final Type contentType = new TypeToken<List<CheatGroup>>() {}.getType();
+	private static final Type contentType = new TypeToken<CheatGroup[]>() {
+	}.getType();
 	
 	public CheatSheet getCheatSheetContent(int id) {
 		String selection = CheatSheetEntry._ID + "=" + id;
-		if(CheatSheetsApp.isNetworkAvailable()) {
-			selection += " and "+CheatSheetEntry.LAST_SYNC + ">" + (System.currentTimeMillis() - CACHE_LIFETIME);
+		if (CheatSheetsApp.isNetworkAvailable()) {
+			selection += " and " + CheatSheetEntry.LAST_SYNC + ">" + (System.currentTimeMillis() - CACHE_LIFETIME);
 		}
 		Cursor cursor = mDatabase.query(CheatSheetEntry.TABLE_NAME, CheatSheetEntry.PROJECTION_CONTENT,
 				selection, null, null, null, null, "1");
 		try {
 			if (cursor.getCount() == 0) return null;
 			cursor.moveToNext();
-			List<CheatGroup> cheat_groups =  API.sGson.fromJson(cursor.getString(6), contentType);
+			CheatGroup[] cheat_groups = API.sGson.fromJson(cursor.getString(6), contentType);
 			return new CheatSheet(cursor.getInt(0), cursor.getInt(1), cursor.getString(2),
-					cursor.getString(3), cursor.getString(4), cheat_groups, Arrays.asList(cursor.getString(5).split(",")),
+					cursor.getString(3), cursor.getString(4), cheat_groups, cursor.getString(5).split(","),
 					new Date(cursor.getLong(7)));
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,6 +1,9 @@
 package net.egordmitriev.cheatsheets.pojo;
 
+import net.egordmitriev.cheatsheets.api.API;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -14,15 +17,15 @@ public class CheatSheet extends MatchableModel {
     public String title;
     public String subtitle;
     public String description;
-    public List<CheatGroup> cheat_groups;
-    public List<String> tags;
+    public CheatGroup[] cheat_groups;
+    public String[] tags;
     public Date last_sync;
     public boolean isLocal;
 
     public CheatSheet() {
     }
     
-    public CheatSheet(int id, int type, String title, String subtitle, String description, List<CheatGroup> cheat_groups, List<String> tags, Date last_sync) {
+    public CheatSheet(int id, int type, String title, String subtitle, String description, CheatGroup[] cheat_groups, String[] tags, Date last_sync) {
         this.id = id;
         this.type = type;
         this.title = title;
@@ -39,11 +42,15 @@ public class CheatSheet extends MatchableModel {
             add(title);
             add(subtitle);
             add(description);
-            addAll(tags);
+            addAll(Arrays.asList(tags));
         }};
     }
     
-    public boolean applyQuery(String query) {
+    public boolean isLocal() {
+        return API.getCachedIds().contains(id);
+    }
+    
+    public boolean filter(String query) {
         return matchesString(query, false);
     }
 }

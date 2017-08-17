@@ -37,7 +37,6 @@ public class CheatGroupHolder extends RecyclerViewHolder<CheatGroup> {
         mExpandableLayout.setOnExpansionUpdateListener(new ExpansionArrowListener(ButterKnife.findById(itemView, R.id.expandable_arrow)));
     }
 
-    @Override
     public void onBind(CheatGroup data) {
         mExpandableLayout.setExpansion(1);
         mTitle.setText(Html.fromHtml(data.title));

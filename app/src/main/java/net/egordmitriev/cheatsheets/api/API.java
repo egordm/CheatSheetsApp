@@ -1,7 +1,6 @@
 package net.egordmitriev.cheatsheets.api;
 
 import com.google.gson.Gson;
-import com.orhanobut.logger.Logger;
 
 import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
@@ -29,24 +28,24 @@ public class API {
 			.build()
 			.create(CheatSheetService.class);
 	
-	private static List<Category> mCheatSheets = null;
+	private static Category[] mCheatSheets = null;
 	
-	public static void requestCategories(DataCallback<ArrayList<Category>> callback) {
+	public static void requestCategories(DataCallback<Category[]> callback) {
 		if (mCheatSheets == null && Constants.USE_CACHE) {
 			mCheatSheets = CheatSheetsApp.getRegistry().getCategories();
 		}
-		if (mCheatSheets != null && mCheatSheets.size() > 0) {
-			callback.onData((ArrayList<Category>) mCheatSheets);
+		if (mCheatSheets != null && mCheatSheets.length > 0) {
+			callback.onData(mCheatSheets);
 			return;
 		}
-		callback.setInterceptor(new DataCallback.SuccessInterceptor<ArrayList<Category>>() {
+		callback.setInterceptor(new DataCallback.SuccessInterceptor<Category[]>() {
 			@Override
-			public void success(ArrayList<Category> data) {
+			public void success(Category[] data) {
 				mCheatSheets = data;
 				CheatSheetsApp.getRegistry().tryPutCategories(data);
 			}
 		});
-		Call<ArrayList<Category>> call = sService.getCategories(Constants.BETA_BUILD ? 1 : 0);
+		Call<Category[]> call = sService.getCategories(Constants.BETA_BUILD ? 1 : 0);
 		call.enqueue(callback);
 	}
 	
@@ -65,7 +64,6 @@ public class API {
 				CheatSheetsApp.getRegistry().updateCheatSheetContent(cheatSheetId, sGson.toJson(data.cheat_groups));
 				if (sCachedIds != null && !sCachedIds.contains(cheatSheetId)) {
 					sCachedIds.add(cheatSheetId);
-					Logger.d(cheatSheetId);
 				}
 			}
 		});
@@ -74,20 +72,16 @@ public class API {
 	}
 	
 	private static List<Integer> sCachedIds = null;
-	
 	public static List<Integer> getCachedIds() {
 		if (sCachedIds != null) return sCachedIds;
 		sCachedIds = CheatSheetsApp.getRegistry().getCheatSheetsCached();
 		return sCachedIds;
 	}
 	
-	public static Category addRecentlyOpened(List<Category> categories) {
-		List<Integer> recentIds = CheatSheetsApp.getRegistry().getCheatSheetsRecent(10);
+	public static Category addRecentlyOpened(Category[] categories) {
+		List<Integer> recentIds = CheatSheetsApp.getRegistry().getCheatSheetsRecent(8);
 		if (recentIds.size() == 0) return null;
-		for (int i = categories.size() - 1; i >= 0; i--) {
-			if (categories.get(i).temp) categories.remove(i);
-		}
-		
+
 		List<CheatSheet> recents = new ArrayList<>();
 		for (int id : recentIds) {
 			CheatSheet temp = Category.getCheatSheet(id, categories);
@@ -98,7 +92,7 @@ public class API {
 		Category ret = new Category(
 				CheatSheetsApp.getAppContext().getString(R.string.recently_opened),
 				null,
-				recents
+				recents.toArray(new CheatSheet[recents.size()])
 		);
 		ret.temp = true;
 		return ret;

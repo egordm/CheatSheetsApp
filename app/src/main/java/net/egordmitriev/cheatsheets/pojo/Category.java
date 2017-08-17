@@ -14,19 +14,16 @@ public class Category extends MatchableModel {
 	public int id;
 	public String title;
 	public String description;
-	public List<CheatSheet> cheat_sheets;
+	public CheatSheet[] cheat_sheets;
 	
-	public Category() {
-	}
-	
-	public Category(int id, String title, String description, List<CheatSheet> cheat_sheets) {
+	public Category(int id, String title, String description, CheatSheet[] cheat_sheets) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.cheat_sheets = cheat_sheets;
 	}
 	
-	public Category(String title, String description, List<CheatSheet> cheat_sheets) {
+	public Category(String title, String description, CheatSheet[] cheat_sheets) {
 		this.title = title;
 		this.description = description;
 		this.cheat_sheets = cheat_sheets;
@@ -55,7 +52,7 @@ public class Category extends MatchableModel {
 		return null;
 	}
 	
-	public static CheatSheet getCheatSheet(int id, List<Category> categories) {
+	public static CheatSheet getCheatSheet(int id, Category[] categories) {
 		for (Category category : categories) {
 			CheatSheet temp = category.getCheatSheet(id);
 			if (temp != null) return temp;
@@ -63,24 +60,15 @@ public class Category extends MatchableModel {
 		return null;
 	}
 	
-	public Category cloneMe() {
-		Category ret = new Category(id, title, description, (List<CheatSheet>) ((ArrayList<CheatSheet>)cheat_sheets).clone());
-		ret.temp = temp;
-		return ret;
-	}
-	
-	public Category applyQuery(String query) {
+	public boolean filter(String query, boolean recursive) {
 		if(TextUtils.isEmpty(query) || matchesString(query, false)) {
-			return this;
+			return true;
 		}
-		List<CheatSheet> results = new ArrayList<>();
-		for (CheatSheet cheatSheet : cheat_sheets) {
-			if(cheatSheet.applyQuery(query)) results.add(cheatSheet);
+		if(recursive) {
+			for (CheatSheet cheatSheet : cheat_sheets) {
+				if (cheatSheet.filter(query)) return true;
+			}
 		}
-		if(results.isEmpty()) return null;
-		Category ret = cloneMe();
-		ret.cheat_sheets = results;
-		return ret;
+		return false;
 	}
-	
 }

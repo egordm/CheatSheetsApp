@@ -19,32 +19,32 @@ public abstract class AdvancedRecyclerAdapter<TD extends MatchableModel, TVH ext
         public int compare(TD o1, TD o2) {
             return 0;
         }
-
+    
         @Override
         public void onChanged(int position, int count) {
             notifyItemRangeChanged(position, count);
         }
-
+    
         @Override
         public boolean areContentsTheSame(TD oldItem, TD newItem) {
             return oldItem.equals(newItem);
         }
-
+    
         @Override
         public boolean areItemsTheSame(TD item1, TD item2) {
             return item1 == item2;
         }
-
+    
         @Override
         public void onInserted(int position, int count) {
             notifyItemRangeInserted(position, count);
         }
-
+    
         @Override
         public void onRemoved(int position, int count) {
             notifyItemRangeRemoved(position, count);
         }
-
+    
         @Override
         public void onMoved(int fromPosition, int toPosition) {
             notifyItemMoved(fromPosition, toPosition);
@@ -80,6 +80,10 @@ public abstract class AdvancedRecyclerAdapter<TD extends MatchableModel, TVH ext
     public void add(List<TD> models) {
         mData.addAll(models);
     }
+    
+    public void add(TD[] models) {
+        mData.addAll(models);
+    }
 
     public void remove(List<TD> models) {
         mData.beginBatchedUpdates();
@@ -89,6 +93,14 @@ public abstract class AdvancedRecyclerAdapter<TD extends MatchableModel, TVH ext
         mData.endBatchedUpdates();
     }
 
+    public void setAll(List<TD> models) {
+        mData.beginBatchedUpdates();
+        for(int i = 0; i < mData.size(); i++) {
+            mData.removeItemAt(i);
+        }
+        mData.addAll(models);
+        mData.endBatchedUpdates();
+    }
     public Class<TD> getClassOfB() {
         ParameterizedType superclass = (ParameterizedType) getClass().getGenericSuperclass();
 
