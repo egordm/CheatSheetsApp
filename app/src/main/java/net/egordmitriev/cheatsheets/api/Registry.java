@@ -147,6 +147,16 @@ public class Registry {
 		return ret;
 	}
 	
+	public boolean isCached(int cheatSheetId) {
+		Cursor cursor = mDatabase.query(CheatSheetEntry.TABLE_NAME, new String[]{CheatSheetEntry._ID},
+				"(" + RegistryContract.SQL_WHERE_CACHED + ") and "+CheatSheetEntry._ID+"="+cheatSheetId, null, null, null, null);
+		try {
+			return cursor.getCount() > 0;
+		} finally {
+			cursor.close();
+		}
+	}
+	
 	public List<Integer> getCheatSheetsRecent(int count) {
 		Cursor cursor = mDatabase.query(CheatSheetEntry.TABLE_NAME, new String[]{CheatSheetEntry._ID},
 				CheatSheetEntry.LAST_USED + " > 0", null, null, null,

@@ -1,6 +1,9 @@
 package net.egordmitriev.cheatsheets.api;
 
+import android.net.Uri;
+
 import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
 
 import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
@@ -8,10 +11,14 @@ import net.egordmitriev.cheatsheets.pojo.Category;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.utils.Constants;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
+import net.egordmitriev.cheatsheets.utils.Utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -69,6 +76,37 @@ public class API {
 		});
 		Call<CheatSheet> call = sService.getCheatSheet(cheatSheetId);
 		call.enqueue(callback);
+	}
+	
+	public static void requestPDF(final DataCallback<Uri> callback, final int cheatSheetId) {
+		Uri ret = null;
+		if(Constants.USE_CACHE && CheatSheetsApp.getRegistry().isCached(cheatSheetId)) {
+			File file = new File(CheatSheetsApp.getAppContext().getFilesDir(), Constants.CACHE_FILENAME_CHEATSHEET + cheatSheetId + ".pdf");
+			if(file.exists()) ret = Uri.fromFile(file);
+		}
+		if(ret != null) {
+			callback.onData(ret);
+			Logger.d("PDF local");
+			return;
+		}
+		Call<ResponseBody> call = sService.getPDF(cheatSheetId);
+		call.enqueue(new DataCallback<ResponseBody>() {
+			@Override
+			public void onData(ResponseBody data) {
+				try {
+					Uri ret = Utils.writeFile(Constants.CACHE_FILENAME_CHEATSHEET + cheatSheetId + ".pdf", data.byteStream());
+					CheatSheetsApp.getRegistry().updateCheatSheetContent(cheatSheetId, null);
+					callback.onData(ret);
+				} catch (IOException e) {
+					e.printStackTrace();
+					callback.onError(e);
+				}
+			}
+			@Override
+			public void onError(Throwable t) {
+				callback.onError(t);
+			}
+		});
 	}
 	
 	private static List<Integer> sCachedIds = null;

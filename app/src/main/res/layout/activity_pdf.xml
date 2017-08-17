@@ -17,7 +17,7 @@
             android:id="@+id/doc_wrapper"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?actionBarSize">
+            android:layout_marginTop="72dp">
 
             <net.egordmitriev.libmupdf.PDFView
                 android:id="@+id/doc_view_inner"
@@ -33,8 +33,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="?actionBarSize"
             app:loading_resourceID="@layout/component_loading"
-            app:state="loading"
-            android:visibility="gone"/>
+            app:state="loading"/>
 
         <include layout="@layout/app_bar"/>
 

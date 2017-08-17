@@ -42,7 +42,7 @@ dependencies {
     compile 'com.orhanobut:logger:2.1.1'
     compile 'com.jakewharton:butterknife:8.6.0'
 
-    compile(name:'libmupdf-1.1', ext:'aar')
+    compile(name:'libmupdf-1.2', ext:'aar')
 
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     testCompile 'junit:junit:4.12'
