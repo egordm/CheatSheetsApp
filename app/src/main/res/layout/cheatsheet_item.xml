@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/wrapper"
-    android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:foreground="?selectableItemBackground"
-    android:orientation="horizontal"
-    android:padding="@dimen/spacing_half">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/wrapper"
+              android:layout_width="match_parent"
+              android:layout_height="40dp"
+              android:foreground="?selectableItemBackground"
+              android:orientation="horizontal"
+              android:padding="@dimen/spacing_half">
 
     <TextView
         android:id="@+id/title"
@@ -18,9 +18,16 @@
         android:textAppearance="@style/AppTheme.TextAppearance.Group"/>
 
     <ImageView
+        android:id="@+id/pdf"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_pdf"/>
+
+    <ImageView
         android:id="@+id/local_status"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_cloud" />
+        android:layout_marginLeft="@dimen/spacing_half"
+        android:src="@drawable/ic_cloud"/>
 
 </LinearLayout>

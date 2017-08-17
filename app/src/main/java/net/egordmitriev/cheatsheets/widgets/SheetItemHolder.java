@@ -15,8 +15,6 @@ import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static android.R.attr.data;
-
 /**
  * Created by EgorDm on 13-Jun-2017.
  */
@@ -29,6 +27,9 @@ public class SheetItemHolder extends RecyclerViewHolder<CheatSheet> {
 	@BindView(R.id.local_status)
 	ImageView mLocalStatusView;
 	
+	@BindView(R.id.pdf)
+	ImageView mPdf;
+	
 	public SheetItemHolder(Activity activity, View view) {
 		super(activity, view);
 	}
@@ -37,8 +38,9 @@ public class SheetItemHolder extends RecyclerViewHolder<CheatSheet> {
 	public void onBind(CheatSheet data) {
 		mData = data;
 		mTitleView.setText(data.title);
+		mPdf.setVisibility(mData.type == 1 ? View.VISIBLE : View.GONE);
+		mLocalStatusView.setImageResource(mData.isLocal() ? R.drawable.ic_local : R.drawable.ic_cloud);
 		onUpdate();
-		//todo mView.setBackgroundResource((position % 2 == 0) ? R.color.tableEven : R.color.tableUneven);
 	}
 	
 	@OnClick(R.id.wrapper)

@@ -26,4 +26,8 @@ public abstract class RecyclerViewHolder<T> extends RecyclerView.ViewHolder {
     }
 
     public abstract void onBind(T data);
+    
+    public View getView() {
+        return mView;
+    }
 }
