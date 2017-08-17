@@ -43,7 +43,11 @@ public class Registry {
 	public boolean tryPutCategories(Category[] categories) {
 		mDatabase.beginTransaction();
 		try {
-			mDatabase.delete(CategoryEntry.TABLE_NAME, null, null);
+			List<Integer> cats = getCategoryIds();
+			for(Category category : categories) {
+				cats.remove(Integer.valueOf(category.id));
+			}
+			mDatabase.delete(CategoryEntry.TABLE_NAME, CategoryEntry._ID + " IN (" + TextUtils.join(", ", cats) + ")", null);
 			for (Category category : categories) {
 				putCategory(category);
 			}
@@ -100,6 +104,17 @@ public class Registry {
 		String[] selectionArgs = {String.valueOf(id)};
 		
 		mDatabase.update(CheatSheetEntry.TABLE_NAME, values, selection, selectionArgs);
+	}
+	
+	public List<Integer> getCategoryIds() {
+		Cursor cursor = mDatabase.query(CategoryEntry.TABLE_NAME, new String[]{CategoryEntry.TABLE_NAME},
+				null, null, null, null, null);
+		List<Integer> ret = new ArrayList<>();
+		while (cursor.moveToNext()) {
+			ret.add(cursor.getInt(0));
+		}
+		cursor.close();
+		return ret;
 	}
 	
 	public Category[] getCategories() {

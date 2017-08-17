@@ -57,7 +57,7 @@ public class API {
 	}
 	
 	public static void requestCheatSheet(DataCallback<CheatSheet> callback, final int cheatSheetId) {
-		CheatSheet ret;
+		CheatSheet ret = null;
 		if (Constants.USE_CACHE) {
 			ret = CheatSheetsApp.getRegistry().getCheatSheetContent(cheatSheetId);
 		}
