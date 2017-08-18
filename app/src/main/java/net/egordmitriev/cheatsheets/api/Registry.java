@@ -44,7 +44,7 @@ public class Registry {
 		mDatabase.beginTransaction();
 		try {
 			List<Integer> cats = getCategoryIds();
-			for(Category category : categories) {
+			for (Category category : categories) {
 				cats.remove(Integer.valueOf(category.id));
 			}
 			mDatabase.delete(CategoryEntry.TABLE_NAME, CategoryEntry._ID + " IN (" + TextUtils.join(", ", cats) + ")", null);
@@ -66,7 +66,10 @@ public class Registry {
 		vals.put(CategoryEntry._ID, category.id);
 		vals.put(CategoryEntry.TITLE, category.title);
 		vals.put(CategoryEntry.DESCRIPTION, category.description);
-		long ret = mDatabase.insertWithOnConflict(CategoryEntry.TABLE_NAME, null, vals, SQLiteDatabase.CONFLICT_REPLACE);
+		long ret = mDatabase.insertWithOnConflict(CategoryEntry.TABLE_NAME, null, vals, SQLiteDatabase.CONFLICT_IGNORE);
+		if (ret == -1) {
+			mDatabase.update(CategoryEntry.TABLE_NAME, vals, CategoryEntry._ID + "=?", new String[]{String.valueOf(category.id)});
+		}
 		
 		for (CheatSheet cheatSheet : category.cheat_sheets) {
 			putCheatSheet(cheatSheet, category.id);
@@ -83,7 +86,12 @@ public class Registry {
 		vals.put(CheatSheetEntry.SUBTITLE, cheatSheet.subtitle);
 		vals.put(CheatSheetEntry.DESCRIPTION, cheatSheet.description);
 		vals.put(CheatSheetEntry.TAGS, TextUtils.join(",", cheatSheet.tags));
-		return mDatabase.insertWithOnConflict(CheatSheetEntry.TABLE_NAME, null, vals, SQLiteDatabase.CONFLICT_REPLACE);
+		long ret = mDatabase.insertWithOnConflict(CheatSheetEntry.TABLE_NAME, null, vals, SQLiteDatabase.CONFLICT_IGNORE);
+		if (ret == -1) {
+			mDatabase.update(CheatSheetEntry.TABLE_NAME, vals, CheatSheetEntry._ID + "=?", new String[]{String.valueOf(cheatSheet.id)});
+		}
+		
+		return ret;
 	}
 	
 	public void updateCheatSheetContent(int id, String content) {
@@ -107,7 +115,7 @@ public class Registry {
 	}
 	
 	public List<Integer> getCategoryIds() {
-		Cursor cursor = mDatabase.query(CategoryEntry.TABLE_NAME, new String[]{CategoryEntry.TABLE_NAME},
+		Cursor cursor = mDatabase.query(CategoryEntry.TABLE_NAME, new String[]{CategoryEntry._ID},
 				null, null, null, null, null);
 		List<Integer> ret = new ArrayList<>();
 		while (cursor.moveToNext()) {
@@ -164,7 +172,7 @@ public class Registry {
 	
 	public boolean isCached(int cheatSheetId) {
 		Cursor cursor = mDatabase.query(CheatSheetEntry.TABLE_NAME, new String[]{CheatSheetEntry._ID},
-				"(" + RegistryContract.SQL_WHERE_CACHED + ") and "+CheatSheetEntry._ID+"="+cheatSheetId, null, null, null, null);
+				"(" + RegistryContract.SQL_WHERE_CACHED + ") and " + CheatSheetEntry._ID + "=" + cheatSheetId, null, null, null, null);
 		try {
 			return cursor.getCount() > 0;
 		} finally {
