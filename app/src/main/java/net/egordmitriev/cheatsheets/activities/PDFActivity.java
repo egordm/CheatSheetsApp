@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.artifex.mupdf.fitz.Document;
 
+import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.api.API;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
@@ -35,10 +36,12 @@ public class PDFActivity extends SearchBarActivity {
 	@BindView(R.id.loaderview)
 	CustomLoaderView mLoaderView;
 	
-	@BindView(R.id.doc_view_inner)
+	@BindView(R.id.doc_wrapper)
+	protected RelativeLayout mDocWrapper;
+	
+	
 	protected PDFView mDocView;
 	
-	private Document mDoc;
 	private ImageButton mNextButton;
 	private ImageButton mPreviousButton;
 	//private Registry mRegistry;
@@ -55,6 +58,7 @@ public class PDFActivity extends SearchBarActivity {
 			finish();
 			return;
 		}
+		CheatSheetsApp.getRegistry().updateCheatSheetsUsed(id);
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -66,10 +70,6 @@ public class PDFActivity extends SearchBarActivity {
 		});
 		
 		initSearchView();
-		
-		RelativeLayout layout = (RelativeLayout) findViewById(R.id.doc_wrapper);
-		mDocView.setupHandles(layout);
-		mDocView.setSearchScrollPos(0.35f);
 		
 		API.requestPDF(getCallback(), id);
 	}
@@ -110,6 +110,17 @@ public class PDFActivity extends SearchBarActivity {
 		mNextButton.setVisibility(View.GONE);
 	}
 	
+	private void initPdfView(Uri data) {
+		mDocView = new PDFView(this);
+		mDocView.setupHandles(mDocWrapper);
+		mDocView.setSearchScrollPos(0.35f);
+		
+		Document doc = Document.openDocument(Uri.decode(data.getEncodedPath()));
+		mDocView.setDocument(doc);
+		mDocWrapper.removeAllViews();
+		mDocWrapper.addView(mDocView);
+	}
+	
 	@Override
 	public boolean onQueryTextChange(String newText) {
 		int visibility = TextUtils.isEmpty(newText) ? View.GONE : View.VISIBLE;
@@ -120,6 +131,7 @@ public class PDFActivity extends SearchBarActivity {
 	
 	@Override
 	public boolean onQueryTextSubmit(String query) {
+		if(mDocView == null) return false;
 		mDocView.onSearchNext(query);
 		return true;
 	}
@@ -130,9 +142,9 @@ public class PDFActivity extends SearchBarActivity {
 	}
 	
 	@Override
-	public void finish()
-	{
-		mDocView.finish();
+	public void finish() {
+		if(mDocView != null)
+			mDocView.finish();
 		super.finish();
 	}
 	
@@ -152,8 +164,7 @@ public class PDFActivity extends SearchBarActivity {
 			
 			@Override
 			public void onData(Uri data) {
-				mDoc = Document.openDocument(Uri.decode(data.getEncodedPath()));
-				mDocView.setDocument(mDoc);
+				initPdfView(data);
 				mLoaderView.setState(LoaderView.STATE_IDLE);
 			}
 			

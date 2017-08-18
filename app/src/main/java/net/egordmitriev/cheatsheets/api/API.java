@@ -86,7 +86,6 @@ public class API {
 		}
 		if(ret != null) {
 			callback.onData(ret);
-			Logger.d("PDF local");
 			return;
 		}
 		Call<ResponseBody> call = sService.getPDF(cheatSheetId);

@@ -35,7 +35,7 @@
             app:loading_resourceID="@layout/component_loading"
             app:state="loading"/>
 
-        <include layout="@layout/app_bar"/>
+        <include layout="@layout/app_bar_neg_padded"/>
 
     </android.support.design.widget.CoordinatorLayout>
 
