@@ -12,6 +12,9 @@ import java.util.List;
  */
 
 public class CheatSheet extends MatchableModel {
+    public static final int TYPE_NATIVE = 0;
+    public static final int TYPE_PDF = 1;
+    
     public int id;
     public int type;
     public String title;

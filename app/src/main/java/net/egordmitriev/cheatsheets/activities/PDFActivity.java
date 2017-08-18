@@ -24,6 +24,8 @@ import net.egordmitriev.loaderview.LoaderView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static net.egordmitriev.cheatsheets.activities.DetailActivity.CHEATSHEET_ID_KEY;
+
 /**
  * Created by egordm on 7-8-2017.
  */
@@ -44,13 +46,32 @@ public class PDFActivity extends SearchBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mLoaderView.setState(LoaderView.STATE_LOADING);
+		int id = -1;
+		if(getIntent() != null) {
+			id = getIntent().getIntExtra(CHEATSHEET_ID_KEY, -1);
+		}
+		if (id == -1) {
+			finish();
+			return;
+		}
+		
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayShowHomeEnabled(true);
+		mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onBackPressed();
+			}
+		});
+		
 		initSearchView();
 		
 		RelativeLayout layout = (RelativeLayout) findViewById(R.id.doc_wrapper);
 		mDocView.setupHandles(layout);
 		mDocView.setSearchScrollPos(0.35f);
 		
-		API.requestPDF(getCallback(), 80);
+		API.requestPDF(getCallback(), id);
 	}
 	
 	private void initSearchView() {
@@ -145,4 +166,10 @@ public class PDFActivity extends SearchBarActivity {
 			}
 		};
 	}
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		finish();
+	}
+	
 }

@@ -1,15 +1,14 @@
 package net.egordmitriev.cheatsheets.widgets;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
-import net.egordmitriev.cheatsheets.activities.DetailActivity;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 
 import butterknife.BindView;
@@ -45,9 +44,7 @@ public class SheetItemHolder extends RecyclerViewHolder<CheatSheet> {
 	
 	@OnClick(R.id.wrapper)
 	public void onClick() {
-		Intent intent = new Intent(mActivity, DetailActivity.class);
-		intent.putExtra(DetailActivity.CHEATSHEET_ID_KEY, mData.id);
-		mActivity.startActivity(intent);
+		CheatSheetsApp.openCheatSheet(mActivity, mData);
 	}
 	
 	public static View inflate(LayoutInflater inflater, ViewGroup parent, boolean bind) {
