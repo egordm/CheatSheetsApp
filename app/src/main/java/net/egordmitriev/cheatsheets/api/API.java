@@ -94,6 +94,9 @@ public class API {
 				try {
 					Uri ret = Utils.writeFile(Constants.CACHE_FILENAME_CHEATSHEET + cheatSheetId + ".pdf", data.byteStream());
 					CheatSheetsApp.getRegistry().updateCheatSheetContent(cheatSheetId, null);
+					if (sCachedIds != null && !sCachedIds.contains(cheatSheetId)) {
+						sCachedIds.add(cheatSheetId);
+					}
 					callback.onData(ret);
 				} catch (IOException e) {
 					e.printStackTrace();
