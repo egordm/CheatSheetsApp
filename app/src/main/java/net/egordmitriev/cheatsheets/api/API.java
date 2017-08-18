@@ -3,7 +3,6 @@ package net.egordmitriev.cheatsheets.api;
 import android.net.Uri;
 
 import com.google.gson.Gson;
-import com.orhanobut.logger.Logger;
 
 import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;

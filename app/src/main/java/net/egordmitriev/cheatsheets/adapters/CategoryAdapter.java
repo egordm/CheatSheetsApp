@@ -6,13 +6,18 @@ import android.view.ViewGroup;
 
 import net.egordmitriev.cheatsheets.activities.MainActivity;
 import net.egordmitriev.cheatsheets.widgets.CategoryGroupHolder;
+import net.egordmitriev.cheatsheets.widgets.RecentsGroupHolder;
+import net.egordmitriev.cheatsheets.widgets.RecyclerViewHolder;
 import net.egordmitriev.cheatsheets.widgets.presenters.CategoryGroupPresenter;
 
 /**
  * Created by egordm on 16-8-2017.
  */
 
-public class CategoryAdapter extends AdvancedRecyclerAdapterPr<CategoryGroupPresenter, CategoryGroupHolder> {
+public class CategoryAdapter extends AdvancedRecyclerAdapterPr<CategoryGroupPresenter, RecyclerViewHolder<CategoryGroupPresenter>> {
+	
+	public static final int TYPE_CATEGORY = 0;
+	public static final int TYPE_RECENTS = 1;
 	
 	protected MainActivity mActivity;
 	protected CategoryGroupPresenter mRecents;
@@ -24,25 +29,40 @@ public class CategoryAdapter extends AdvancedRecyclerAdapterPr<CategoryGroupPres
 	//todo hide when searching; mayby hop to recents = null
 	
 	@Override
-	public CategoryGroupHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		View holder = CategoryGroupHolder.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-		CategoryGroupHolder ret = new CategoryGroupHolder(mActivity, holder);
-		return ret;
+	public RecyclerViewHolder<CategoryGroupPresenter> onCreateViewHolder(ViewGroup parent, int viewType) {
+		View view = CategoryGroupHolder.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+		switch (viewType) {
+			case TYPE_RECENTS:
+				return new RecentsGroupHolder(mActivity, view);
+			default:
+				return new CategoryGroupHolder(mActivity, view);
+		}
 	}
 	
 	@Override
-	public void onBindViewHolder(CategoryGroupHolder holder, int position) {
-		if(mRecents == null || !mShowRecents) {
-			holder.onBind(mData.get(position));
-		} else {
-			if (position == 0) holder.onBind(mRecents);
-			else holder.onBind(mData.get(position - 1));
+	public void onBindViewHolder(RecyclerViewHolder<CategoryGroupPresenter> holder, int position) {
+		if(holder instanceof RecentsGroupHolder) {
+			holder.onBind(mRecents);
+		} else if (holder instanceof CategoryGroupHolder) {
+			holder.onBind(mData.get(usingRecents() ? position - 1 : position));
 		}
 	}
 	
 	@Override
 	public int getItemCount() {
 		return (mRecents == null || !mShowRecents) ? super.getItemCount() : super.getItemCount() + 1;
+	}
+	
+	@Override
+	public int getItemViewType(int position) {
+		if(usingRecents() && position == 0) {
+			return TYPE_RECENTS;
+		}
+		return TYPE_CATEGORY;
+	}
+	
+	public boolean usingRecents() {
+		return mRecents != null && mShowRecents;
 	}
 	
 	public void setRecents(CategoryGroupPresenter recents) {
