@@ -173,6 +173,7 @@ public class PDFActivity extends SearchBarActivity {
 			
 			@Override
 			public void onError(Throwable t) {
+				t.printStackTrace();
 				TextView errorText = ButterKnife.findById(mLoaderView, R.id.loaderview_errormsg);
 				errorText.setText(t.getMessage());
 				mLoaderView.setState(LoaderView.STATE_ERROR);

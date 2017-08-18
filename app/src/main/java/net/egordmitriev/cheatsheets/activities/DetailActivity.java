@@ -1,5 +1,6 @@
 package net.egordmitriev.cheatsheets.activities;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,6 +46,11 @@ public class DetailActivity extends SearchBarActivity {
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+			mCheatsheetContainer.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		}
+		
+		
 		mLoaderView.setState(LoaderView.STATE_LOADING);
 		if (getIntent() != null) {
 			mCheatSheet = getIntent().getParcelableExtra(CHEATSHEET_KEY);
