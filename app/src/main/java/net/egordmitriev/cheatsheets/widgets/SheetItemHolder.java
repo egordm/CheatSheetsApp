@@ -7,12 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * Created by EgorDm on 13-Jun-2017.
@@ -40,11 +38,6 @@ public class SheetItemHolder extends RecyclerViewHolder<CheatSheet> {
 		mPdf.setVisibility(mData.type == 1 ? View.VISIBLE : View.GONE);
 		mLocalStatusView.setImageResource(mData.isLocal() ? R.drawable.ic_local : R.drawable.ic_cloud);
 		onUpdate();
-	}
-	
-	@OnClick(R.id.wrapper)
-	public void onClick() {
-		CheatSheetsApp.openCheatSheet(mActivity, mData);
 	}
 	
 	public static View inflate(LayoutInflater inflater, ViewGroup parent, boolean bind) {

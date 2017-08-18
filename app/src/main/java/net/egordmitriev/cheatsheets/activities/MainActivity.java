@@ -79,11 +79,15 @@ public class MainActivity extends SearchBarActivity
 	}
 	
 	private void onUpdate() {
+		onSoftUpdate();
+		addRecents(mCategories);
+	}
+	
+	public void onSoftUpdate() {
 		for(int i = 0; i < mCategoryContainer.getChildCount(); i++) {
 			CategoryGroupHolder holder = (CategoryGroupHolder) mCategoryContainer.getChildViewHolder(mCategoryContainer.getChildAt(i));
 			holder.onUpdate();
 		}
-		addRecents(mCategories);
 	}
 	
 	private void setupWithData(Category[] data) {

@@ -114,6 +114,19 @@ public class API {
 		return sCachedIds;
 	}
 	
+	public static void deleteCheatSheetCache(CheatSheet cheatSheet) {
+		sCachedIds.remove(Integer.valueOf(cheatSheet.id));
+		if (cheatSheet.type == CheatSheet.TYPE_PDF) {
+			File file = new File(CheatSheetsApp.getAppContext().getFilesDir(), Constants.CACHE_FILENAME_CHEATSHEET + cheatSheet.id + ".pdf");
+			try {
+				if(file.exists()) file.delete();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		CheatSheetsApp.getRegistry().deleteCheatSheet(cheatSheet);
+	}
+	
 	public static Category addRecentlyOpened(Category[] categories) {
 		List<Integer> recentIds = CheatSheetsApp.getRegistry().getCheatSheetsRecent(8);
 		if (recentIds.size() == 0) return null;

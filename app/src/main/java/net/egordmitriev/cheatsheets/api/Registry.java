@@ -216,4 +216,11 @@ public class Registry {
 		}
 		return null;
 	}
+	
+	public void deleteCheatSheet(CheatSheet cheatSheet) {
+		ContentValues vals = new ContentValues();
+		vals.putNull(CheatSheetEntry.CONTENT);
+		vals.putNull(CheatSheetEntry.LAST_SYNC);
+		mDatabase.update(CheatSheetEntry.TABLE_NAME, vals, CheatSheetEntry._ID + "=" + cheatSheet.id, null);
+	}
 }
