@@ -29,106 +29,106 @@ import butterknife.ButterKnife;
  */
 
 public class DetailActivity extends SearchBarActivity {
-
-    public static final String CHEATSHEET_ID_KEY = "cheatsheet_id_key";
-
-    @BindView(R.id.dataContainer)
-    RecyclerView mCheatsheetContainer;
-
-    @BindView(R.id.loaderview)
-    CustomLoaderView mLoaderView;
-
-    protected CheatSheet mCheatSheet;
-
-    protected CheatsheetAdapter mAdapter;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mLoaderView.setState(LoaderView.STATE_LOADING);
-        int id = -1;
-        if(getIntent() != null) {
-            id = getIntent().getIntExtra(CHEATSHEET_ID_KEY, -1);
-        }
-        if (id == -1) {
-            finish();
-            return;
-        }
-        CheatSheetsApp.getRegistry().updateCheatSheetsUsed(id);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        mCheatsheetContainer.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new CheatsheetAdapter(this);
-        mCheatsheetContainer.setAdapter(mAdapter);
-
-        API.requestCheatSheet(getCallback(), id);
-    }
-
-    @Override
-    protected int getLayout() {
-        return R.layout.activity_detail;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        if(mCheatSheet == null) return false;
-        List<CheatGroup> data = new ArrayList<>();
-        for (CheatGroup cheatGroup : mCheatSheet.cheat_groups) {
-            CheatGroup temp = cheatGroup.applyQuery(query);
-            if (temp != null) data.add(temp);
-        }
-        mAdapter.replaceAll(data);
-        return true;
-    }
-
-    private void setupWithData(CheatSheet data) {
-        mCheatSheet = data;
-        mSearchView.setQueryHint("Search in "+mCheatSheet.title);
-        mAdapter.add(mCheatSheet.cheat_groups);
-        mLoaderView.setState(LoaderView.STATE_IDLE);
-    }
-
-    private DataCallback<CheatSheet> getCallback() {
-        return new DataCallback<CheatSheet>() {
-            @Override
-            public void init() {
-                super.init();
-                Button retryButton = ButterKnife.findById(mLoaderView, R.id.loaderview_retry);
-                retryButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (retry()) {
-                            mLoaderView.setState(LoaderView.STATE_LOADING);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onData(CheatSheet data) {
-                setupWithData(data);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                TextView errorText = ButterKnife.findById(mLoaderView, R.id.loaderview_errormsg);
-                errorText.setText(t.getMessage());
-                mLoaderView.setState(LoaderView.STATE_ERROR, true);
-            }
-        };
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
+	
+	public static final String CHEATSHEET_KEY = "cheatsheet_key";
+	
+	@BindView(R.id.dataContainer)
+	RecyclerView mCheatsheetContainer;
+	
+	@BindView(R.id.loaderview)
+	CustomLoaderView mLoaderView;
+	
+	protected CheatSheet mCheatSheet;
+	
+	protected CheatsheetAdapter mAdapter;
+	
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mLoaderView.setState(LoaderView.STATE_LOADING);
+		if (getIntent() != null) {
+			mCheatSheet = getIntent().getParcelableExtra(CHEATSHEET_KEY);
+		}
+		if (mCheatSheet == null) {
+			finish();
+			return;
+		}
+		CheatSheetsApp.getRegistry().updateCheatSheetsUsed(mCheatSheet.id);
+		
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayShowHomeEnabled(true);
+		mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onBackPressed();
+			}
+		});
+		
+		mSearchView.setQueryHint("Search in " + mCheatSheet.title);
+		
+		mCheatsheetContainer.setLayoutManager(new LinearLayoutManager(this));
+		mAdapter = new CheatsheetAdapter(this);
+		mCheatsheetContainer.setAdapter(mAdapter);
+		
+		API.requestCheatSheet(getCallback(), mCheatSheet.id);
+	}
+	
+	@Override
+	protected int getLayout() {
+		return R.layout.activity_detail;
+	}
+	
+	@Override
+	public boolean onQueryTextSubmit(String query) {
+		if (mCheatSheet == null) return false;
+		List<CheatGroup> data = new ArrayList<>();
+		for (CheatGroup cheatGroup : mCheatSheet.cheat_groups) {
+			CheatGroup temp = cheatGroup.applyQuery(query);
+			if (temp != null) data.add(temp);
+		}
+		mAdapter.replaceAll(data);
+		return true;
+	}
+	
+	private void setupWithData(CheatSheet data) {
+		mCheatSheet = data;
+		mAdapter.add(mCheatSheet.cheat_groups);
+		mLoaderView.setState(LoaderView.STATE_IDLE);
+	}
+	
+	private DataCallback<CheatSheet> getCallback() {
+		return new DataCallback<CheatSheet>() {
+			@Override
+			public void init() {
+				super.init();
+				Button retryButton = ButterKnife.findById(mLoaderView, R.id.loaderview_retry);
+				retryButton.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						if (retry()) {
+							mLoaderView.setState(LoaderView.STATE_LOADING);
+						}
+					}
+				});
+			}
+			
+			@Override
+			public void onData(CheatSheet data) {
+				setupWithData(data);
+			}
+			
+			@Override
+			public void onError(Throwable t) {
+				TextView errorText = ButterKnife.findById(mLoaderView, R.id.loaderview_errormsg);
+				errorText.setText(t.getMessage());
+				mLoaderView.setState(LoaderView.STATE_ERROR, true);
+			}
+		};
+	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		finish();
+	}
 }

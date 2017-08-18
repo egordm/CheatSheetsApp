@@ -17,6 +17,7 @@ import com.artifex.mupdf.fitz.Document;
 import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
 import net.egordmitriev.cheatsheets.api.API;
+import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
 import net.egordmitriev.cheatsheets.widgets.CustomLoaderView;
 import net.egordmitriev.libmupdf.PDFView;
@@ -25,7 +26,7 @@ import net.egordmitriev.loaderview.LoaderView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static net.egordmitriev.cheatsheets.activities.DetailActivity.CHEATSHEET_ID_KEY;
+import static net.egordmitriev.cheatsheets.activities.DetailActivity.CHEATSHEET_KEY;
 
 /**
  * Created by egordm on 7-8-2017.
@@ -39,7 +40,7 @@ public class PDFActivity extends SearchBarActivity {
 	@BindView(R.id.doc_wrapper)
 	protected RelativeLayout mDocWrapper;
 	
-	
+	protected CheatSheet mCheatSheet;
 	protected PDFView mDocView;
 	
 	private ImageButton mNextButton;
@@ -52,13 +53,15 @@ public class PDFActivity extends SearchBarActivity {
 		mLoaderView.setState(LoaderView.STATE_LOADING);
 		int id = -1;
 		if(getIntent() != null) {
-			id = getIntent().getIntExtra(CHEATSHEET_ID_KEY, -1);
+			mCheatSheet = getIntent().getParcelableExtra(CHEATSHEET_KEY);
 		}
-		if (id == -1) {
+		if (mCheatSheet == null) {
 			finish();
 			return;
 		}
-		CheatSheetsApp.getRegistry().updateCheatSheetsUsed(id);
+		CheatSheetsApp.getRegistry().updateCheatSheetsUsed(mCheatSheet.id);
+		
+		mSearchView.setQueryHint("Search in " + mCheatSheet.title);
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -71,7 +74,7 @@ public class PDFActivity extends SearchBarActivity {
 		
 		initSearchView();
 		
-		API.requestPDF(getCallback(), id);
+		API.requestPDF(getCallback(), mCheatSheet.id);
 	}
 	
 	private void initSearchView() {

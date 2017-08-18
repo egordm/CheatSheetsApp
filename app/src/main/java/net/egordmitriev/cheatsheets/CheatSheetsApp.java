@@ -60,7 +60,7 @@ public class CheatSheetsApp extends Application {
 		} else {
 			intent = new Intent(activity, DetailActivity.class);
 		}
-		intent.putExtra(DetailActivity.CHEATSHEET_ID_KEY, cheatSheet.id);
+		intent.putExtra(DetailActivity.CHEATSHEET_KEY, cheatSheet);
 		activity.startActivity(intent);
 	}
 }
