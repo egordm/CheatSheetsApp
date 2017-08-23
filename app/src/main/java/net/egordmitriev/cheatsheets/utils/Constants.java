@@ -17,5 +17,5 @@ public class Constants {
     public static final Pattern CHEATSHEET_ID_REGEX = Pattern.compile(CACHE_FILENAME_CHEATSHEET + "(.*?).json");
 
     public static final boolean USE_CACHE = true;
-    public static final boolean BETA_BUILD = true;
+    public static final boolean BETA_BUILD = false;
 }
