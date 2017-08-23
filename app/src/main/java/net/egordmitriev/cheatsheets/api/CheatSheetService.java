@@ -16,7 +16,7 @@ import retrofit2.http.Query;
 public interface CheatSheetService {
 
     @GET("api")
-    Call<Category[]> getCategories(@Query("beta") int beta);
+    Call<Category[]> getCategories(@Query("beta") int beta, @Query("version") int version);
 
     @GET("api/cheatsheet/{id}")
     Call<CheatSheet> getCheatSheet(@Path("id") int cheatSheetId);
