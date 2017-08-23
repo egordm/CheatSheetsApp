@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 public class Constants {
     public static final String API_BASE_URL = "http://cheat-sheets.ga/";
+    public static final int API_VERSION = 2;
 
     public static final long CACHE_LIFETIME = 86400000;
 

@@ -10,11 +10,13 @@ import net.egordmitriev.cheatsheets.pojo.Category;
 import net.egordmitriev.cheatsheets.pojo.CheatSheet;
 import net.egordmitriev.cheatsheets.utils.Constants;
 import net.egordmitriev.cheatsheets.utils.DataCallback;
+import net.egordmitriev.cheatsheets.utils.PreferenceManager;
 import net.egordmitriev.cheatsheets.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -37,7 +39,9 @@ public class API {
 	private static Category[] mCheatSheets = null;
 	
 	public static void requestCategories(DataCallback<Category[]> callback) {
-		if (mCheatSheets == null && Constants.USE_CACHE) {
+		Date lastSync = PreferenceManager.getInstance().getCategoryExpires();
+		if (mCheatSheets == null && Constants.USE_CACHE && lastSync != null &&
+				((new Date()).before(lastSync) || !CheatSheetsApp.isNetworkAvailable())) {
 			mCheatSheets = CheatSheetsApp.getRegistry().getCategories();
 		}
 		if (mCheatSheets != null && mCheatSheets.length > 0) {
@@ -49,9 +53,10 @@ public class API {
 			public void success(Category[] data) {
 				mCheatSheets = data;
 				CheatSheetsApp.getRegistry().tryPutCategories(data);
+				PreferenceManager.getInstance().putCategoryExpires();
 			}
 		});
-		Call<Category[]> call = sService.getCategories(Constants.BETA_BUILD ? 1 : 0);
+		Call<Category[]> call = sService.getCategories(Constants.BETA_BUILD ? 1 : 0, Constants.API_VERSION);
 		call.enqueue(callback);
 	}
 	
