@@ -66,10 +66,8 @@ public class CategoryAdapter extends AdvancedRecyclerAdapterPr<CategoryGroupPres
 	}
 	
 	public void setRecents(CategoryGroupPresenter recents) {
-		boolean inserted = mRecents == null;
 		mRecents = recents;
-		if(inserted) notifyItemInserted(0);
-		else notifyItemChanged(0);
+		setShowRecents(mShowRecents);
 	}
 	
 	public void setShowRecents(boolean showRecents) {

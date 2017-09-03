@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.artifex.mupdf.fitz.Document;
 
@@ -52,7 +53,7 @@ public class PDFActivity extends SearchBarActivity {
 		super.onCreate(savedInstanceState);
 		mLoaderView.setState(LoaderView.STATE_LOADING);
 		int id = -1;
-		if(getIntent() != null) {
+		if (getIntent() != null) {
 			mCheatSheet = getIntent().getParcelableExtra(CHEATSHEET_KEY);
 		}
 		if (mCheatSheet == null) {
@@ -78,7 +79,7 @@ public class PDFActivity extends SearchBarActivity {
 	}
 	
 	private void initSearchView() {
-		LinearLayout.LayoutParams searchButtonParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+		LinearLayout.LayoutParams searchButtonParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
 		
 		TypedValue typedValue = new TypedValue();
 		getTheme().resolveAttribute(R.attr.selectableItemBackgroundBorderless, typedValue, true);
@@ -99,13 +100,17 @@ public class PDFActivity extends SearchBarActivity {
 		mPreviousButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				mDocView.onSearchPrevious(mSearchView.getQuery().toString());
+				try {
+					mDocView.onSearchPrevious(mSearchView.getQuery().toString());
+				} catch (Exception e) {}
 			}
 		});
 		mNextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				mDocView.onSearchNext(mSearchView.getQuery().toString());
+				try {
+					mDocView.onSearchNext(mSearchView.getQuery().toString());
+				} catch (Exception e) {}
 			}
 		});
 		
@@ -114,14 +119,19 @@ public class PDFActivity extends SearchBarActivity {
 	}
 	
 	private void initPdfView(Uri data) {
-		mDocView = new PDFView(this);
-		mDocView.setupHandles(mDocWrapper);
-		mDocView.setSearchScrollPos(0.35f);
-		
-		Document doc = Document.openDocument(Uri.decode(data.getEncodedPath()));
-		mDocView.setDocument(doc);
-		mDocWrapper.removeAllViews();
-		mDocWrapper.addView(mDocView);
+		try {
+			mDocView = new PDFView(this);
+			mDocView.setupHandles(mDocWrapper);
+			mDocView.setSearchScrollPos(0.35f);
+			
+			Document doc = Document.openDocument(Uri.decode(data.getEncodedPath()));
+			mDocView.setDocument(doc);
+			mDocWrapper.removeAllViews();
+			mDocWrapper.addView(mDocView);
+		} catch (Exception e) {
+			Toast.makeText(this, "Woops, something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+			finish();
+		}
 	}
 	
 	@Override
@@ -134,8 +144,11 @@ public class PDFActivity extends SearchBarActivity {
 	
 	@Override
 	public boolean onQueryTextSubmit(String query) {
-		if(mDocView == null) return false;
-		mDocView.onSearchNext(query);
+		if (mDocView == null) return false;
+		try {
+			mDocView.onSearchNext(query);
+		} catch (Exception e) {
+		}
 		return true;
 	}
 	
@@ -146,7 +159,7 @@ public class PDFActivity extends SearchBarActivity {
 	
 	@Override
 	public void finish() {
-		if(mDocView != null)
+		if (mDocView != null)
 			mDocView.finish();
 		super.finish();
 	}
@@ -181,6 +194,7 @@ public class PDFActivity extends SearchBarActivity {
 			}
 		};
 	}
+	
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();

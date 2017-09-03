@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.egordmitriev.cheatsheets.CheatSheetsApp;
 import net.egordmitriev.cheatsheets.R;
@@ -46,7 +47,7 @@ public class DetailActivity extends SearchBarActivity {
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+		if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
 			mCheatsheetContainer.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
 		
@@ -97,6 +98,12 @@ public class DetailActivity extends SearchBarActivity {
 	}
 	
 	private void setupWithData(CheatSheet data) {
+		if (data == null || data.cheat_groups == null) {
+			if (data != null) API.deleteCheatSheetCache(data);
+			Toast.makeText(this, "Woops, something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
+			finish();
+			return;
+		}
 		mCheatSheet = data;
 		mAdapter.add(mCheatSheet.cheat_groups);
 		mLoaderView.setState(LoaderView.STATE_IDLE);

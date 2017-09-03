@@ -28,7 +28,6 @@ public abstract class DataCallback<T> implements Callback<T> {
 
     @Override
     public void onResponse(@NonNull Call<T> call, @NonNull Response<T> response) {
-        //Logger.json(sGson.toJson(response.body()));
         if(response.body() == null) {
             onFailure(call, new NullPointerException("Resource has not been found."));
             return;
@@ -41,8 +40,6 @@ public abstract class DataCallback<T> implements Callback<T> {
     public void onFailure(@NonNull Call<T> call, @NonNull Throwable t) {
         mCall = call.clone();
         onError(new LocalizedException(t));
-        //t.printStackTrace();
-
     }
 
     public abstract void onData(T data);
@@ -50,6 +47,7 @@ public abstract class DataCallback<T> implements Callback<T> {
 
     public boolean retry() {
         if(mCall == null) return false;
+        if(mCall.isExecuted() || mCall.isCanceled()) mCall = mCall.clone();
         mCall.enqueue(this);
         return true;
     }
